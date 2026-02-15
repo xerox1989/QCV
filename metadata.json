@@ -1,0 +1,9 @@
+{
+  "name": "Quantum Authentication Vault (QAV)",
+  "description": "A high-security, military-grade encrypted vault for managing identities, certificates, and authentication data with AI-powered features.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
