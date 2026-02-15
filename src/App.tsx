@@ -24,7 +24,7 @@ import { analyzeImageForVault, generateSecurePassword } from './services/geminiS
 import { registerBiometrics, authenticateBiometrics } from './services/webauthnService';
 import { db } from './services/db';
 import { exportToPDF, exportToXLSX, exportToDOCX, convertToCSV, downloadFile } from './services/exportUtils';
-import { VaultItem, VaultItemType, UserConfig, UserProfile, AppCustomization } from './types';
+import type { VaultItem, VaultItemType, UserConfig, UserProfile, AppCustomization } from './types';
 
 const APP_CUSTOMIZATION_KEY = 'QAV_APP_CUSTOMIZATION';
 
