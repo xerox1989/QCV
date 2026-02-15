@@ -1,0 +1,1790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>QGBC — Full Hybrid Development Manual (English &amp; Bangla) | Mohammad Maynul Hasan</title>
+<style>
+  /* Base Style from Original Manual */
+  :root{
+    --bg:#04050a;--panel:#0b1220;--muted:#8aa6b1;--accentA:#00FFA3;--accentB:#FF6EC7;--accentC:#FFD500;
+    --card:#0f1724;--glass:rgba(255,255,255,0.02);--mono:Menlo,monospace;
+    /* Bangla section specific colors */
+    --bangla-header-bg: #1c0f24;
+    --bangla-accent: #7a5cff;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#02040a 0%,#041024 100%);color:#dff7f0;font-family:Inter,system-ui,Segoe UI,Arial; -webkit-font-smoothing:antialiased}
+  .container{max-width:1200px;margin:18px auto;padding:12px}
+  header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-radius:8px;background:linear-gradient(90deg, rgba(255,255,255,0.006), rgba(255,255,255,0.004));border:1px solid rgba(255,255,255,0.02)}
+  header h1{margin:0;font-size:20px;color:var(--accentA);font-family:var(--mono)}
+  header .meta{font-size:12px;color:var(--muted)}
+  nav.index{margin:14px 0;padding:12px;background:linear-gradient(90deg, rgba(255,255,255,0.008), rgba(255,255,255,0.004));border:1px solid rgba(255,255,255,0.02);border-radius:8px}
+  nav.index ol{margin:0;padding-left:20px}
+  nav.index a{color:#9feee0;text-decoration:none}
+  .page{background:linear-gradient(180deg,#071022 0%,#08122b 100%);border-radius:8px;padding:20px;margin:20px 0;border:1px solid rgba(255,255,255,0.02);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .page h2{margin:0 0 8px 0;color:var(--accentB);font-size:18px}
+  .page h3{margin:8px 0;color:var(--accentC);font-size:14px}
+  p{margin:8px 0;line-height:1.45;color:#dff7f0;font-size:13px}
+  ul,ol{margin:8px 0 12px 20px;color:#dff7f0}
+  pre{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;overflow:auto;font-family:var(--mono);font-size:12px;color:#ffeeb0}
+  .diagram{margin:12px 0;text-align:center}
+  svg{max-width:100%;height:auto;border-radius:6px}
+  .footer{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:12px}
+  .pageno{font-family:var(--mono);color:#9bd7c6}
+  code{background:rgba(255,255,255,0.02);padding:3px 6px;border-radius:6px;color:#ffd27a}
+  .download{background:linear-gradient(90deg,var(--accentA),var(--accentB));padding:8px 12px;border-radius:8px;color:#061018;font-weight:600;display:inline-block;text-decoration:none}
+  /* anchors */
+  a.anchor{display:block;position:relative;top:-60px;visibility:hidden}
+  /* Bangla Section Styles */
+  .bangla-manual header{background:var(--bangla-header-bg);border:1px solid var(--bangla-accent);margin-top:40px}
+  .bangla-manual h1{color:var(--bangla-accent)}
+  .bangla-manual nav.index a{color:#bfeeee}
+  .bangla-manual .page h2{color:var(--accentA);border-bottom:1px solid var(--bangla-accent);padding-bottom:4px}
+  .bangla-manual .pageno{color:#FFD500}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div>
+    <h1>QGBC — Full Hybrid Development Manual</h1>
+    <div class="meta">Hybrid single file · Clickable index · 40 pages · Detailed ERD, Postgres DDL, Termux bootstrap</div>
+  </div>
+  <div style="text-align:right">
+    <div class="meta">Prepared for: Alpha Ultimate Ltd. — Yusra Project</div>
+    <div class="meta">Generated: </div>
+  </div>
+</header>
+
+<nav class="index" aria-label="Clickable index">
+  <strong style="color:var(--accentA)">Clickable Index</strong>
+  <ol>
+    <li><a href="#p1">1. System Overview & Goals</a></li>
+    <li><a href="#p2">2. High-level Architecture Diagram</a></li>
+    <li><a href="#p3">3. Tech Stack — Purpose & Versions</a></li>
+    <li><a href="#p4">4. Full Project File & Folder Scaffolding</a></li>
+    <li><a href="#p5">5. Development Sequence & 40-step Timeline</a></li>
+    <li><a href="#p6">6. Frontend Architecture, Components & Animations</a></li>
+    <li><a href="#p7">7. Backend Architecture & API Contracts</a></li>
+    <li><a href="#p8">8. ER Diagrams — Expanded (SVG vector)</a></li>
+    <li><a href="#p9">9. Postgres DDL — Full Schema & Indexes</a></li>
+    <li><a href="#p10">10. Firestore Document Model & Security Rules</a></li>
+    <li><a href="#p11">11. Auth & RBAC — Implementation Steps</a></li>
+    <li><a href="#p12">12. CI/CD Pipelines & GitHub Actions</a></li>
+    <li><a href="#p13">13. Termux Dev Environment — Setup Guide</a></li>
+    <li><a href="#p14">14. Termux Bootstrap Script (Downloadable)</a></li>
+    <li><a href="#p15">15. AI/Yusra Architecture & Embeddings</a></li>
+    <li><a href="#p16">16. Embedding Store & Vector Search — design notes</a></li>
+    <li><a href="#p17">17. KPI Computation & Dashboard Design</a></li>
+    <li><a href="#p18">18. Monitoring, Alerts & Runbooks</a></li>
+    <li><a href="#p19">19. Backups & Disaster Recovery</a></li>
+    <li><a href="#p20">20. Animations, Touch UX & Accessibility (Practical)</a></li>
+    <li><a href="#p21">21. Example: End-to-end flow — Create Invoice (detailed)</a></li>
+    <li><a href="#p22">22. Observability — logs & traces</a></li>
+    <li><a href="#p23">23. Security Checklist (must pass before prod)</a></li>
+    <li><a href="#p24">24. Data Privacy & Compliance</a></li>
+    <li><a href="#p25">25. Cost Control for AI</a></li>
+    <li><a href="#p26">26. Testing Matrix</a></li>
+    <li><a href="#p27">27. Playbook — Rollback & Incident Response</a></li>
+    <li><a href="#p28">28. Dev Handoff — Documentation & Onboarding</a></li>
+    <li><a href="#p29">29. Sample SQL Queries for Reports</a></li>
+    <li><a href="#p30">30. Data Migration Strategy</a></li>
+    <li><a href="#p31">31. UX Patterns for Admin & Mobile</a></li>
+    <li><a href="#p32">32. Export & Integration — External Systems</a></li>
+    <li><a href="#p33">33. Frontend Code Snippet — API client with retries</a></li>
+    <li><a href="#p34">34. Example Cloud Function (JS) — invoice.create</a></li>
+    <li><a href="#p35">35. How to Collect Templates & Where to Start</a></li>
+    <li><a href="#p36">36. Internationalization & Currency Handling</a></li>
+    <li><a href="#p37">37. Future Improvements & Model Ops</a></li>
+    <li><a href="#p38">38. Appendix A — Full Postgres DDL downloadable</a></li>
+    <li><a href="#p39">39. Appendix B — Useful CLI Commands & Troubleshooting</a></li>
+    <li><a href="#p40">40. Glossary, References & Next Steps</a></li>
+  </ol>
+</nav>
+
+<a class="anchor" id="p1"></a>
+<section class="page">
+  <h2>1. System Overview & Goals</h2>
+  <p>This manual documents everything required to design, develop, secure, deploy and operate the QGBC platform (Quantum Glass Business Cloud) and its AI assistant "Yusra". It is aimed at non-coders who will learn the system internals, and at engineers who will implement production-grade deliverables.</p>
+  <h3>Primary objectives</h3>
+  <ul>
+    <li>Deliver a production-ready PWA and admin dashboard with real-time operations and a canonical accounting ledger (Postgres).</li>
+    <li>Provide an extensible AI layer for document processing, estimation and conversational assistance (Yusra).</li>
+    <li>Ensure reliability, observability, and guarded AI costs via canaries and quotas.</li>
+  </ul>
+  <p class="footer"><span class="pageno">Page 1</span><span></span></p>
+</section>
+
+<a class="anchor" id="p2"></a>
+<section class="page">
+  <h2>2. High-level Architecture Diagram</h2>
+  <p>Hybrid architecture — Firestore for realtime UX and offline sync, Postgres (Cloud SQL) for canonical financial transactions, Cloud Functions / Cloud Run for API and AI proxy, Vector index for embeddings, hosting for frontend (Firebase Hosting or Vercel).</p>
+
+  <div class="diagram" aria-hidden="true">
+    <svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="High level architecture">
+      <rect x="0" y="0" width="1200" height="420" rx="8" fill="#071124"/>
+      <rect x="40" y="40" width="320" height="120" rx="10" fill="#071a1d" stroke="#00FFA3" stroke-width="2"/>
+      <text x="200" y="80" fill="#9fffd0" font-size="14" text-anchor="middle" font-family="sans-serif">React PWA</text>
+      <text x="200" y="102" fill="#cfeee0" font-size="12" text-anchor="middle">Tailwind · Chart.js · Offline</text>
+      <rect x="440" y="40" width="320" height="120" rx="10" fill="#1a0830" stroke="#FF6EC7" stroke-width="2"/>
+      <text x="600" y="80" fill="#ffc0ea" font-size="14" text-anchor="middle">Cloud Functions / Cloud Run</text>
+      <text x="600" y="102" fill="#ffd7ef" font-size="12" text-anchor="middle">Node 20 · Idempotent APIs</text>
+      <rect x="820" y="24" width="340" height="64" rx="8" fill="#0b1a10" stroke="#FFD500" stroke-width="2"/>
+      <text x="990" y="46" fill="#fff1a0" font-size="13" text-anchor="middle">Postgres — Ledger (ACID)</text>
+      <rect x="820" y="106" width="340" height="64" rx="8" fill="#0b1320" stroke="#7fb3ff" stroke-width="2"/>
+      <text x="990" y="128" fill="#d8ecff" font-size="13" text-anchor="middle">Firestore — Realtime / UI</text>
+      <rect x="440" y="200" width="320" height="120" rx="10" fill="#06152a" stroke="#7fb3ff" stroke-width="2"/>
+      <text x="600" y="240" fill="#cfeeff" font-size="14" text-anchor="middle">Yusra AI Layer</text>
+      <text x="600" y="262" fill="#e6f7ff" font-size="12" text-anchor="middle">Embeddings + LLM + OCR</text>
+      <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#bfeeee"/></marker></defs>
+      <line x1="360" y1="100" x2="440" y2="100" stroke="#9fffd0" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="760" y1="100" x2="820" y2="70" stroke="#ffc0ea" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="760" y1="220" x2="820" y2="220" stroke="#cfeeff" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="600" y1="160" x2="600" y2="200" stroke="#ffd27a" stroke-width="1.6" marker-end="url(#ar)"/>
+    </svg>
+  </div>
+
+  <p class="footer"><span class="pageno">Page 2</span><span></span></p>
+</section>
+
+<a class="anchor" id="p3"></a>
+<section class="page">
+  <h2>3. Tech Stack — purpose & pinned versions</h2>
+  <p>All versions pinned for deterministic builds. Use lockfiles and CI cache to prevent drift.</p>
+  <h3>Frontend</h3>
+  <ul>
+    <li><strong>React 18.2.0</strong> — core UI framework; concurrent features and ecosystem stability.</li>
+    <li><strong>TypeScript 5.3.x</strong> — static typing for medium/large codebase.</li>
+    <li><strong>Vite 5.x</strong> — fast dev server and lean builds.</li>
+    <li><strong>Tailwind CSS 3.4.x</strong> — utility-driven responsive styling.</li>
+    <li><strong>Chart.js 4.3.x</strong> — charts for KPIs; use lazy loading for performance.</li>
+  </ul>
+  <h3>Backend</h3>
+  <ul>
+    <li><strong>Node.js 20.7.x</strong> — runtime for Cloud Functions and server processes.</li>
+    <li><strong>Cloud Functions / Cloud Run</strong> — serverless hosting for APIs and worker jobs.</li>
+    <li><strong>Postgres 15</strong> — canonical ledger and accounting DB.</li>
+    <li><strong>Firestore (Native)</strong> — realtime read models and mobile offline support.</li>
+    <li><strong>Vertex AI / OpenAI</strong> — LLMs and embeddings via secure proxy functions.</li>
+  </ul>
+  <p class="footer"><span class="pageno">Page 3</span><span></span></p>
+</section>
+
+<a class="anchor" id="p4"></a>
+<section class="page">
+  <h2>4. Full Project File & Folder Scaffolding (monorepo)</h2>
+  <p>Production-grade monorepo layout with workspaces. Each package contains README and .env.example.</p>
+  <pre>
+/qgbc
+├─ README.md
+├─ package.json (workspaces)
+├─ pnpm-lock.yaml
+├─ .github/workflows/
+│  ├─ ci.yml
+│  └─ deploy.yml
+├─ infra/
+│  ├─ terraform/
+│  └─ scripts/
+├─ packages/
+│  ├─ frontend/
+│  │  ├─ public/
+│  │  ├─ src/
+│  │  │  ├─ app/
+│  │  │  ├─ pages/
+│  │  │  ├─ features/
+│  │  │  ├─ components/
+│  │  │  └─ services/
+│  │  ├─ package.json
+│  │  └─ tailwind.config.js
+│  └─ functions/
+│     ├─ src/
+│     │  ├─ handlers/
+│     │  ├─ jobs/
+│     │  ├─ ai/
+│     │  └─ lib/
+│     └─ package.json
+├─ docs/
+│  ├─ architecture.md
+│  └─ runbooks/
+  </pre>
+
+  <p>Each package should expose scripts: <code>dev</code>, <code>build</code>, <code>lint</code>, <code>test</code>. Keep small, single-responsibility functions in the functions package.</p>
+  <p class="footer"><span class="pageno">Page 4</span><span></span></p>
+</section>
+
+<a class="anchor" id="p5"></a>
+<section class="page">
+  <h2>5. Development Sequence — 40-step timeline (condensed)</h2>
+  <p>Below is a high-resolution sequence of steps to go from zero to production. Each item should be tracked as a task in your issue tracker and have acceptance criteria.</p>
+  <ol>
+    <li>Define domain model & mapping: determine which entities live in Postgres vs Firestore.</li>
+    <li>Initialize monorepo, create workspaces, commit initial lockfiles.</li>
+    <li>Provision cloud projects: dev, stage, prod using Terraform skeleton.</li>
+    <li>Set up CI skeleton: lint, typecheck, unit tests, build.</li>
+    <li>Implement Auth skeleton (Firebase Auth) and RBAC design doc.</li>
+    <li>Build frontend shell and design system (Tailwind tokens + Storybook).</li>
+    <li>Create Postgres schema DDL and run migrations in dev DB.</li>
+    <li>Create Firestore doc model & write security rules; test with emulator.</li>
+    <li>Implement invoices API (idempotent, writes to Postgres).</li>
+    <li>Implement mirror job: invoice.created → Firestore invoice_view.</li>
+    <li>Implement payroll integration with WPS export module.</li>
+    <li>Implement worker roster and certificate upload flows.</li>
+    <li>Build CEO dashboard and KPI recompute job (scheduled).</li>
+    <li>Implement AI ingestion pipeline (OCR -> embeddings -> vector store).</li>
+    <li>Integrate AI query endpoint with rate-limits and caching.</li>
+    <li>Run integration tests against emulator for critical flows.</li>
+    <li>Deploy preview channel and run smoke tests manually.</li>
+    <li>Address issues, finalize staging acceptance criteria.</li>
+    <li>Run load tests and tune indexes and functions scaling.</li>
+    <li>Perform security audit and pen-test remediation.</li>
+    <li>Deploy to production with canary traffic split.</li>
+    <li>Monitor SLOs, verify alerts and logs for 72 hours.</li>
+    <li>Conduct DR drill and verify Postgres/Firestore restore steps.</li>
+    <li>Enable AI quotas and cost alerts.</li>
+    <li>Iterate based on user feedback and continue roadmap items.</li>
+  </ol>
+  <p class="footer"><span class="pageno">Page 5</span><span></span></p>
+</section>
+
+<a class="anchor" id="p6"></a>
+<section class="page">
+  <h2>6. Frontend Architecture — components, state & animations</h2>
+  <h3>Structure & state</h3>
+  <ul>
+    <li>Feature-first folders: <code>features/auth</code>, <code>features/projects</code>, etc.</li>
+    <li>Server state via TanStack Query v5 for caching and optimistic updates.</li>
+    <li>Local slices via Zustand for UI-only state (theme, modals).</li>
+  </ul>
+
+  <h3>Animation & touch patterns</h3>
+  <ul>
+    <li>Micro-interactions: Tailwind transitions (duration-150 to 200ms).</li>
+    <li>Complex timelines: GSAP 3.x reserved for hero and dashboard sequences.</li>
+    <li>Touch: use Pointer Events API and avoid passive event listeners that block scroll.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 6</span><span></span></p>
+</section>
+
+<a class="anchor" id="p7"></a>
+<section class="page">
+  <h2>7. Backend Architecture & API Contracts</h2>
+  <p>APIs are thin, idempotent, and transactional. Prefer RPC-style endpoints for writes (POST /v1/invoices.create) and RESTful for reads.</p>
+
+  <h3>Sample contract: create invoice</h3>
+  <pre>{
+  "idempotency_key": "uuid-v4",
+  "company_id": "uuid",
+  "customer": {"name":"Client A","vat_no":"..."},
+  "lines":[{"description":"Labour","qty":10,"unit_price":100,"tax":5}],
+  "currency":"SAR",
+  "due_date":"2025-12-01"
+}</pre>
+
+  <p>Server behavior: validate, start DB transaction in Postgres, insert invoice & lines, emit event `invoice.created`, mirror a denormalized view to Firestore. Return invoice summary.</p>
+  <p class="footer"><span class="pageno">Page 7</span><span></span></p>
+</section>
+
+<a class="anchor" id="p8"></a>
+<section class="page">
+  <h2>8. ER Diagrams — Expanded</h2>
+  <p>Below is a cohesive ER diagram for the Postgres ledger & core entities. This SVG is vector and printable.</p>
+
+  <div class="diagram" aria-hidden="true">
+    <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1000" height="520" rx="8" fill="#071124"/>
+      <rect x="40" y="40" width="220" height="110" rx="8" fill="#072826" stroke="#00FFA3"/>
+      <text x="150" y="70" fill="#bff8df" font-size="13" text-anchor="middle">companies</text>
+      <text x="150" y="92" fill="#dfffe6" font-size="11" text-anchor="middle">id PK · name · vat_no · created_at</text>
+      <rect x="300" y="40" width="220" height="110" rx="8" fill="#23103a" stroke="#FF6EC7"/>
+      <text x="410" y="70" fill="#ffc0ea" font-size="13" text-anchor="middle">projects</text>
+      <text x="410" y="92" fill="#ffd7ef" font-size="11" text-anchor="middle">id PK · company_id FK · name · budget</text>
+      <rect x="560" y="40" width="220" height="110" rx="8" fill="#2b2f07" stroke="#FFD500"/>
+      <text x="670" y="70" fill="#fff2a4" font-size="13" text-anchor="middle">workers</text>
+      <text x="670" y="92" fill="#fff4b2" font-size="11" text-anchor="middle">id PK · name · skillset · certs (json)</text>
+      <rect x="40" y="190" width="320" height="130" rx="8" fill="#0d1630" stroke="#a6e6ff"/>
+      <text x="200" y="220" fill="#cfeeff" font-size="13" text-anchor="middle">invoices</text>
+      <text x="200" y="242" fill="#e6f7ff" font-size="11" text-anchor="middle">id PK · company_id FK · total_amount · status</text>
+      <rect x="400" y="190" width="200" height="130" rx="8" fill="#132014" stroke="#9fffd0"/>
+      <text x="500" y="220" fill="#bfeeee" font-size="13" text-anchor="middle">invoice_lines</text>
+      <text x="500" y="242" fill="#dfffe6" font-size="11" text-anchor="middle">id PK · invoice_id FK · description · qty · unit_price</text>
+      <rect x="640" y="190" width="320" height="130" rx="8" fill="#1b0f24" stroke="#ffd27a"/>
+      <text x="800" y="220" fill="#fff0b4" font-size="13" text-anchor="middle">journal_entries</text>
+      <text x="800" y="242" fill="#ffeeb0" font-size="11" text-anchor="middle">id PK · account_id FK · debit · credit · reference</text>
+
+      <line x1="120" y1="150" x2="360" y2="190" stroke="#bfeeee" stroke-width="1.6" marker-end="url(#ar)"/>
+      <line x1="420" y1="150" x2="420" y2="190" stroke="#ffd7ef" stroke-width="1.6" marker-end="url(#ar)"/>
+      <line x1="650" y1="150" x2="700" y2="190" stroke="#ffd27a" stroke-width="1.6" marker-end="url(#ar)"/>
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#bfeeee"/></marker></defs>
+    </svg>
+  </div>
+
+  <p class="footer"><span class="pageno">Page 8</span><span></span></p>
+</section>
+
+<a class="anchor" id="p9"></a>
+<section class="page">
+  <h2>9. PostgreSQL DDL — Full Schema & Indexes</h2>
+  <p>Run these DDL statements in your dev Postgres (managed Cloud SQL) as part of a migration. Use a migration tool (Flyway, Liquibase, or node-pg-migrate) to version these changes.</p>
+
+  <pre>
+-- 001_create_accounts_and_core_tables.sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE companies (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  vat_no TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE projects (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  budget NUMERIC(18,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE workers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id),
+  name TEXT NOT NULL,
+  skillset JSONB,
+  certifications JSONB,
+  hourly_rate NUMERIC(12,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id),
+  customer JSONB NOT NULL,
+  total_amount NUMERIC(18,2) NOT NULL,
+  currency TEXT NOT NULL DEFAULT 'SAR',
+  status TEXT NOT NULL DEFAULT 'draft',
+  idempotency_key TEXT UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE invoice_lines (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+  description TEXT,
+  qty NUMERIC(12,3) DEFAULT 1,
+  unit_price NUMERIC(18,2) DEFAULT 0,
+  tax_percent NUMERIC(5,2) DEFAULT 0
+);
+
+CREATE TABLE journal_entries (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  account_id UUID NOT NULL,
+  debit NUMERIC(18,2) DEFAULT 0,
+  credit NUMERIC(18,2) DEFAULT 0,
+  txn_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  reference TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE INDEX idx_invoices_company_status ON invoices(company_id, status);
+CREATE INDEX idx_projects_company ON projects(company_id);
+  </pre>
+
+  <p class="note">Guidance: Use DB-level constraints and triggers to maintain balances or write a dedicated balancing service that posts counter-entries to the journal_entries table for every invoice payment.</p>
+  <p class="footer"><span class="pageno">Page 9</span><span></span></p>
+</section>
+
+<a class="anchor" id="p10"></a>
+<section class="page">
+  <h2>10. Firestore Document Model & Security Rules (overview)</h2>
+  <p>Use Firestore read-models to present denormalized, fast-loading documents for the UI. Keep sensitive financial fields authoritative in Postgres only.</p>
+
+  <pre>
+// Suggested collections & doc structure
+/companies/{companyId}
+/projects/{projectId}
+/projects/{projectId}/workers/{workerId}
+/kpis/{companyId}
+/invoices_view/{invoiceId}   // denormalized copy for UI & history
+    {
+      id, company_id, total_amount, status, created_at,
+      lines: [{ description, qty, unit_price, tax_percent }],
+      customer: {...}
+    }
+  </pre>
+
+  <h3>Security rules (example snippet)</h3>
+  <pre>
+// firestore.rules (high level)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /companies/{companyId} {
+      allow read: if request.auth != null && request.auth.token.company_id == companyId;
+      allow write: if request.auth.token.role in ['admin','manager'] && request.auth.token.company_id == companyId;
+    }
+
+    match /invoices_view/{invoiceId} {
+      allow read: if request.auth != null && request.auth.token.company_id == resource.data.company_id;
+      allow write: if false; // only server-side mirroring updates this collection
+    }
+  }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">Page 10</span><span></span></p>
+</section>
+
+<a class="anchor" id="p11"></a>
+<section class="page">
+  <h2>11. Authentication & RBAC — Implementation Steps</h2>
+  <ol>
+    <li>Use Firebase Auth for rapid multi-platform authentication (email, phone, Google). For enterprise SSO later, integrate SAML/OIDC provider.</li>
+    <li>Assign roles as custom claims: <code>role</code> (admin, manager, accountant, worker) and <code>company_id</code>. Custom claims are used in server-side checks and Firestore rules.</li>
+    <li>Server functions validate the token on every request and re-check claims; do not trust client-side role information.</li>
+    <li>Maintain an audit trail: every sensitive action (role change, financial export) must be recorded in an audit table in Postgres and optionally mirrored to a secure audit log storage.</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">Page 11</span><span></span></p>
+</section>
+
+<a class="anchor" id="p12"></a>
+<section class="page">
+  <h2>12. CI/CD — GitHub Actions Workflows</h2>
+  <p>Two workflows: <code>ci.yml</code> (PR checks) and <code>deploy.yml</code> (manual gated deploy to staging/prod).</p>
+
+  <pre name="ci">
+# .github/workflows/ci.yml (excerpt)
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -w lint
+      - run: pnpm -w test
+      - run: pnpm -w build
+  </pre>
+
+  <p>Deploy workflow uses manual approval and deploy previews. Use hosted runners for production deploys and short-lived service account keys stored in GitHub Secrets.</p>
+  <p class="footer"><span class="pageno">Page 12</span><span></span></p>
+</section>
+
+<a class="anchor" id="p13"></a>
+<section class="page">
+  <h2>13. Termux Dev Environment — Setup Guide</h2>
+  <p>Termux provides a Linux-like environment on Android. Use it for simple editing, repo sync, and running node-based dev servers in constrained setups. It is not recommended for heavy load (builds) or production CI.</p>
+
+  <h3>Pre-reqs</h3>
+  <ul>
+    <li>Install Termux from a reliable source (F-Droid preferred).</li>
+    <li>Grant storage permission: <code>termux-setup-storage</code>.</li>
+    <li>Install packages: <code>pkg install git nodejs python clang make openssh</code>.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 13</span><span></span></p>
+</section>
+
+<a class="anchor" id="p14"></a>
+<section class="page">
+  <h2>14. Termux Bootstrap Script (Downloadable)</h2>
+  <p>Save the script below as <code>bootstrap_qgbc.sh</code> on your Termux device, mark executable (<code>chmod +x</code>), edit variables, and run. It installs toolchain, clones scaffold, and starts the Firebase emulator (if configured).</p>
+
+  <pre>
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+# Config — edit before running
+PROJECT_ID="qgbc-dev"
+GIT_REPO="git@github.com:yourname/qgbc.git"
+REPO_DIR="$HOME/qgbc"
+NPM_GLOBAL_PREFIX="$HOME/.npm-global"
+NODE_VERSION="20"
+# Update & packages
+pkg update -y && pkg upgrade -y
+pkg install -y git nodejs python clang make openssh wget
+# npm global prefix
+mkdir -p "$NPM_GLOBAL_PREFIX"
+npm config set prefix "$NPM_GLOBAL_PREFIX"
+export PATH="$NPM_GLOBAL_PREFIX/bin:$PATH"
+echo 'export PATH="'"$NPM_GLOBAL_PREFIX"'/bin:$PATH"' >> ~/.profile
+# Install utilities
+npm install -g pnpm firebase-tools@11.18.0
+# Clone or update repo
+if [ -d "$REPO_DIR" ]; then
+  cd "$REPO_DIR" && git pull
+else
+  git clone "$GIT_REPO" "$REPO_DIR"
+  cd "$REPO_DIR"
+fi
+# Install dependencies
+pnpm install
+# Firebase login: do on desktop and set FIREBASE_TOKEN env if headless
+echo "If browser login required run: firebase login"
+# Start emulator
+firebase emulators:start --only auth,firestore,functions,hosting --project "$PROJECT_ID"
+  </pre>
+
+  <p style="margin-top:8px">To make this script into a downloadable file in your repo scaffold, create <code>packages/tooling/bootstrap_qgbc.sh</code> and commit it. Use the script via Termux or Linux shell.</p>
+  <p class="footer"><span class="pageno">Page 14</span><span></span></p>
+</section>
+
+<a class="anchor" id="p15"></a>
+<section class="page">
+  <h2>15. AI / Yusra Architecture — ingestion & inference</h2>
+  <p>Yusra consists of three subsystems: ingestion (OCR & parsing), vectorization (embeddings & vector store), and inference (LLM). The AI proxy function enforces quota and caching.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1000" height="320" rx="8" fill="#071124"/>
+      <rect x="40" y="28" width="240" height="80" rx="8" fill="#061a22" stroke="#7ff3d1"/>
+      <text x="160" y="56" fill="#bff8df" font-size="13" text-anchor="middle">Ingestion</text>
+      <text x="160" y="76" fill="#dfffe6" font-size="11" text-anchor="middle">OCR -> parsed JSON</text>
+      <rect x="360" y="28" width="240" height="80" rx="8" fill="#121034" stroke="#ffd27a"/>
+      <text x="480" y="56" fill="#fff0b4" font-size="13" text-anchor="middle">Vectorization</text>
+      <text x="480" y="76" fill="#ffeeb0" font-size="11" text-anchor="middle">Embeddings -> vector index</text>
+      <rect x="680" y="28" width="240" height="80" rx="8" fill="#081a2a" stroke="#a6e6ff"/>
+      <text x="800" y="56" fill="#cfeeff" font-size="13" text-anchor="middle">Inference</text>
+      <text x="800" y="76" fill="#e6f7ff" font-size="11" text-anchor="middle">LLM / RAG & prompts</text>
+      <defs><marker id="m2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#bfeeee"/></marker></defs>
+      <line x1="280" y1="68" x2="360" y2="68" stroke="#bfeeee" stroke-width="2" marker-end="url(#m2)"/>
+      <line x1="600" y1="68" x2="680" y2="68" stroke="#ffd27a" stroke-width="2" marker-end="url(#m2)"/>
+    </svg>
+  </div>
+
+  <p class="footer"><span class="pageno">Page 15</span><span></span></p>
+</section>
+
+<a class="anchor" id="p16"></a>
+<section class="page">
+  <h2>16. Embedding Store & Vector Search — design notes</h2>
+  <ul>
+    <li>Use a managed vector index (Vertex Matching Engine, Pinecone, or Qdrant Cloud) if available — avoids operational overhead.</li>
+    <li>Store metadata pointers to original docs (GCS URLs) and small snippets for context.</li>
+    <li>Maintain versioned indices: when documents change, update embeddings asynchronously and track versions to support consistent RAG retrieval.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 16</span><span></span></p>
+</section>
+
+<a class="anchor" id="p17"></a>
+<section class="page">
+  <h2>17. KPI Computation & Dashboard Design</h2>
+  <h3>Architecture</h3>
+  <p>Compute KPIs in scheduled background jobs (Cloud Scheduler -> Cloud Function). Commit aggregated KPI documents to Firestore per company: /kpis/{companyId} for clients to subscribe to. Keep global aggregates in BigQuery for historical trends.</p>
+
+  <h3>Example KPIs</h3>
+  <ul>
+    <li>Monthly Revenue, Receivables Aging, Cash on hand</li>
+    <li>Worker Utilization rate, Average margin per worker</li>
+    <li>Project burn rate and earned value</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 17</span><span></span></p>
+</section>
+
+<a class="anchor" id="p18"></a>
+<section class="page">
+  <h2>18. Monitoring, Alerts & Runbooks</h2>
+  <ul>
+    <li>Critical alerts: service down, error rate above threshold, AI spend spike.</li>
+    <li>Use Cloud Monitoring for uptime checks and function metrics; forward critical alerts to PagerDuty.</li>
+    <li>Maintain runbooks under /docs/runbooks with step-by-step remediation commands and required roles.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 18</span><span></span></p>
+</section>
+
+<a class="anchor" id="p19"></a>
+<section class="page">
+  <h2>19. Backups & Disaster Recovery</h2>
+  <h3>Postgres</h3>
+  <ol>
+    <li>Daily logical backups (pg_dump) to Cloud Storage with lifecycle rules (30/90/365 days).</li>
+    <li>Test restores monthly: restore to a dev instance and run verification scripts.</li>
+  </ol>
+  <h3>Firestore</h3>
+  <ul>
+    <li>Use Firestore export to GCS daily. Keep one-week rolling snapshots for quick restores.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 19</span><span></span></p>
+</section>
+
+<a class="anchor" id="p20"></a>
+<section class="page">
+  <h2>20. Animations, Touch UX & Accessibility (Practical)</h2>
+  <ul>
+    <li>Micro animations: 100–200ms transitions for presses, hovers, and list updates.</li>
+    <li>Large animations: 300–600ms with layered easing and the ability to skip via prefers-reduced-motion.</li>
+    <li>Touch: ensure minimal main-thread work on pointermove; use requestAnimationFrame and passive events for scroll.</li>
+    <li>Accessibility: color contrast, keyboard focus, and screen reader labels for all interactive components.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 20</span><span></span></p>
+</section>
+
+<a class="anchor" id="p21"></a>
+<section class="page">
+  <h2>21. Example: End-to-end flow — Create Invoice (detailed)</h2>
+  <ol>
+    <li>Client UX creates invoice draft and requests creation with idempotency_key.</li>
+    <li>API validates and forwards to an invoices.create Cloud Function.</li>
+    <li>Function starts DB transaction in Postgres, inserts invoice, computes totals, inserts invoice_lines, commits.</li>
+    <li>Function publishes <code>invoice.created</code> event to Pub/Sub.</li>
+    <li>Mirror worker subscribes to the topic, denormalizes the invoice to Firestore for UI and search.</li>
+    <li>Notify accounts via email/SMS and add entry to audit table.</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">Page 21</span><span></span></p>
+</section>
+
+<a class="anchor" id="p22"></a>
+<section class="page">
+  <h2>22. Observability — logs & traces</h2>
+  <p>Use structured JSON logs with fields: <code>request_id</code>, <code>user_id</code>, <code>company_id</code>, <code>latency_ms</code>. Export traces to Cloud Trace (OpenTelemetry). Use correlation ID across client and server to link logs and traces.</p>
+  <p class="footer"><span class="pageno">Page 22</span><span></span></p>
+</section>
+
+<a class="anchor" id="p23"></a>
+<section class="page">
+  <h2>23. Security Checklist (must pass before prod)</h2>
+  <ul>
+    <li>All endpoints require token validation and role checks.</li>
+    <li>Secrets in Secret Manager; no secrets in repos.</li>
+    <li>Dependency scanning enabled in CI and automatic blocking of critical vulnerabilities.</li>
+    <li>Penetration test completed with high/critical findings resolved.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 23</span><span></span></p>
+</section>
+
+<a class="anchor" id="p24"></a>
+<section class="page">
+  <h2>24. Data Privacy & Compliance</h2>
+  <p>Identify what counts as PII in your jurisdiction, store minimally, and encrypt sensitive fields at rest. Provide data export and deletion workflows to comply with local regulations.</p>
+  <p class="footer"><span class="pageno">Page 24</span><span></span></p>
+</section>
+
+<a class="anchor" id="p25"></a>
+<section class="page">
+  <h2>25. Cost Control for AI</h2>
+  <ul>
+    <li>Apply per-org monthly budget caps and throttle AI calls beyond threshold.</li>
+    <li>Cache common queries and results; use a Redis cache layer or Firestore TTL docs.</li>
+    <li>Use small models for simple tasks and reserve large LLM calls for complex queries only.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 25</span><span></span></p>
+</section>
+
+<a class="anchor" id="p26"></a>
+<section class="page">
+  <h2>26. Testing Matrix</h2>
+  <ul>
+    <li>Unit tests for pure functions and utilities — target 80%+</li>
+    <li>Integration tests: emulator-based Firestore rules, function triggers</li>
+    <li>E2E (Playwright): critical flows (sign-in, invoice create, payroll export)</li>
+    <li>Load testing: k6 script for simulated concurrent users on API endpoints</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 26</span><span></span></p>
+</section>
+
+<a class="anchor" id="p27"></a>
+<section class="page">
+  <h2>27. Playbook — Rollback & Incident Response</h2>
+  <ol>
+    <li>On severe errors: immediately revert to previous hosting snapshot and function revision.</li>
+    <li>Open an incident with severity classification, notify stakeholders, and run the runbook steps.</li>
+    <li>After containment, run root cause analysis and publish postmortem within 72 hours.</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">Page 27</span><span></span></p>
+</section>
+
+<a class="anchor" id="p28"></a>
+<section class="page">
+  <h2>28. Dev Handoff — Documentation & Onboarding</h2>
+  <ul>
+    <li>Maintain docs in /docs with architecture, API specs, runbooks, and onboarding checklists.</li>
+    <li>Use Storybook for component documentation and live UI examples.</li>
+    <li>Keep a developer checklist: env vars, service account steps, and local emulator commands.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 28</span><span></span></p>
+</section>
+
+<a class="anchor" id="p29"></a>
+<section class="page">
+  <h2>29. Sample SQL Queries for Reports</h2>
+  <pre>
+-- Monthly revenue by company
+SELECT company_id, date_trunc('month', created_at) AS month, SUM(total_amount) AS revenue
+FROM invoices
+WHERE status = 'paid'
+GROUP BY company_id, month
+ORDER BY month DESC;
+
+-- Worker profitability: revenue attributed / total cost
+-- Requires mapping of worker assignments to invoice lines (join table)
+  </pre>
+
+  <p class="footer"><span class="pageno">Page 29</span><span></span></p>
+</section>
+
+<a class="anchor" id="p30"></a>
+<section class="page">
+  <h2>30. Data Migration Strategy</h2>
+  <ol>
+    <li>If migrating from spreadsheets: define CSV schema and write ETL scripts to validate and load to Postgres; generate idempotency keys.</li>
+    <li>Write migration jobs to create Firestore mirrors from Postgres source-of-truth.</li>
+    <li>Run dry-runs on staging and compare aggregates to ensure parity.</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">Page 30</span><span></span></p>
+</section>
+
+<a class="anchor" id="p31"></a>
+<section class="page">
+  <h2>31. UX Patterns for Admin & Mobile</h2>
+  <ul>
+    <li>Admin: multi-column layout with resizable sidebars, bulk actions for invoices and workers.</li>
+    <li>Mobile: single column, collapsible sections, progressive disclosure for dense tables.</li>
+    <li>Forms: autosave drafts and confirm back navigation for unfinished critical forms.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 31</span><span></span></p>
+</section>
+
+<a class="anchor" id="p32"></a>
+<section class="page">
+  <h2>32. Export & Integration — External Systems</h2>
+  <p>Support CSV, PDF exports and integration endpoints for payroll (WPS), third-party accounting packages, and bank transfers. Use signed URLs for secure downloads and background jobs to generate heavy PDFs (via Puppeteer in Cloud Run).</p>
+  <p class="footer"><span class="pageno">Page 32</span><span></span></p>
+</section>
+
+<a class="anchor" id="p33"></a>
+<section class="page">
+  <h2>33. Frontend Code Snippet — API client with retries</h2>
+  <pre>
+import axios from 'axios';
+import { getAuthToken } from './auth';
+
+const api = axios.create({ baseURL: process.env.API_URL, timeout:15000 });
+
+api.interceptors.request.use(async config => {
+  const token = await getAuthToken();
+  if(token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export async function postWithRetry(url, data, retries = 2){
+  for(let i=0;i<=retries;i++){
+    try { return await api.post(url, data); }
+    catch(err){ if(i===retries) throw err; await new Promise(r=>setTimeout(r, 500*(i+1))); }
+  }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">Page 33</span><span></span></p>
+</section>
+
+<a class="anchor" id="p34"></a>
+<section class="page">
+  <h2>34. Example Cloud Function (JS) — invoice.create</h2>
+  <pre>
+// functions/src/handlers/invoices.js (simplified)
+import { pool } from '../lib/db';
+import { pubsubClient } from '../lib/pubsub';
+
+export async function createInvoice(req, res){
+  const { idempotency_key, company_id, customer, lines } = req.body;
+  // validate...
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    // check idempotency
+    const r = await client.query('SELECT id FROM invoices WHERE idempotency_key=$1', [idempotency_key]);
+    if(r.rowCount) { await client.query('COMMIT'); return res.json({ id: r.rows[0].id }); }
+    const insert = await client.query(
+      'INSERT INTO invoices(company_id, customer, total_amount, idempotency_key) VALUES($1,$2,$3,$4) RETURNING id',
+      [company_id, customer, /* compute total */, idempotency_key]
+    );
+    const invoiceId = insert.rows[0].id;
+    // insert lines...
+    await client.query('COMMIT');
+    await pubsubClient.publish('invoice.created', { invoiceId, company_id });
+    res.json({ id: invoiceId });
+  } catch(e){
+    await client.query('ROLLBACK'); throw e;
+  } finally { client.release(); }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">Page 34</span><span></span></p>
+</section>
+
+<a class="anchor" id="p35"></a>
+<section class="page">
+  <h2>35. How to Collect Templates & Where to Start</h2>
+  <ul>
+    <li>Use Tailwind UI for production components; adapt tokens to your brand palette.</li>
+    <li>Download admin dashboard templates from Creative Tim or ThemeWagon for early prototypes (review licenses).</li>
+    <li>Use Storybook for cataloging components and live rules for designers/developers.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 35</span><span></span></p>
+</section>
+
+<a class="anchor" id="p36"></a>
+<section class="page">
+  <h2>36. Internationalization & Currency Handling</h2>
+  <ul>
+    <li>Store monetary values in smallest units (e.g., halalas) or use fixed precision NUMERIC(18,2) and keep currency code on invoice.</li>
+    <li>Use Intl API for formatting amounts & dates per user locale in the frontend.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 36</span><span></span></p>
+</section>
+
+<a class="anchor" id="p37"></a>
+<section class="page">
+  <h2>37. Future Improvements & Model Ops</h2>
+  <ul>
+    <li>Model monitoring: drift detection, output validation, and fallback responses.</li>
+    <li>Automated retrain triggers based on significant drift or business rule changes.</li>
+    <li>Feature flags for AI features to easily toggle across tenants.</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">Page 37</span><span></span></p>
+</section>
+
+<a class="anchor" id="p38"></a>
+<section class="page">
+  <h2>38. Appendix A — Full Postgres DDL downloadable</h2>
+  <p>Below is a consolidated DDL file content you can save as <code>db/migrations/001_initial.sql</code>.</p>
+  <pre>
+-- (See pages earlier for schema) Put all CREATE TABLE statements here, plus migration metadata and version table.
+  </pre>
+  <p class="footer"><span class="pageno">Page 38</span><span></span></p>
+</section>
+
+<a class="anchor" id="p39"></a>
+<section class="page">
+  <h2>39. Appendix B — Useful CLI Commands & Troubleshooting</h2>
+  <ul>
+    <li>Start emulator: <code>firebase emulators:start --only auth,firestore,functions,hosting</code></li>
+    <li>Run migrations: <code>pnpm --filter functions run migrate</code></li>
+    <li>Inspect logs: <code>firebase functions:log --project qgbc-dev</code></li>
+  </ul>
+  <p class="footer"><span class="pageno">Page 39</span><span></span></p>
+</section>
+
+<a class="anchor" id="p40"></a>
+<section class="page">
+  <h2>40. Glossary, References & Next Steps</h2>
+  <h3>Glossary</h3>
+  <ul>
+    <li><strong>PWA</strong>: Progressive Web App</li>
+    <li><strong>ACID</strong>: Atomicity, Consistency, Isolation, Durability</li>
+    <li><strong>LLM</strong>: Large Language Model</li>
+  </ul>
+
+  <h3>References</h3>
+  <ul>
+    <li>Firebase Documentation — Firestore, Auth, Emulator</li>
+    <li>Postgres documentation — indexing & constraints</li>
+    <li>Vertex AI / OpenAI docs for embeddings & inference</li>
+  </ul>
+
+  <p style="margin-top:12px">NEXT STEPS (practical): Save this file as <code>QGBC_Full_Hybrid_Manual.html</code>, open and export to PDF for distribution. Create the repo scaffold and commit the Termux bootstrap under <code>packages/tooling</code> immediately to enable mobile-first dev.</p>
+
+  <div style="margin-top:12px">
+    <a class="download" href="#p14">Jump to Termux bootstrap script (page 14)</a>
+  </div>
+
+  <p class="footer"><span class="pageno">Page 40</span><span></span></p>
+</section>
+<div class="bangla-manual">
+<header>
+  <div>
+    <h1>QGBC — সম্পূর্ণ হাইব্রিড ডেভেলপমেন্ট ম্যানুয়াল (বাংলা অনুবাদ)</h1>
+    <div class="meta">একক HTML ফাইল · ক্লিকযোগ্য সূচী · ৪০ পৃষ্ঠা · বিস্তারিত ইআরডি, পোস্টগ্রেস ডিডিএল, টার্মাক্স বুটস্ট্র্যাপ</div>
+  </div>
+  <div style="text-align:right">
+    <div class="meta">জন্য প্রস্তুতকৃত: আলফা আল্টিমেট লিমিটেড — ইউসরা প্রজেক্ট</div>
+    <div class="meta">তৈরির তারিখ: </div>
+  </div>
+</header>
+
+<nav class="index" aria-label="Clickable index">
+  <strong style="color:var(--bangla-accent)">ক্লিকযোগ্য সূচী</strong>
+  <ol>
+    <li><a href="#bp1">১. সিস্টেমের সংক্ষিপ্ত বিবরণ ও লক্ষ্যসমূহ</a></li>
+    <li><a href="#bp2">২. উচ্চ-স্তরের আর্কিটেকচার ডায়াগ্রাম</a></li>
+    <li><a href="#bp3">৩. টেক স্ট্যাক — উদ্দেশ্য ও সংস্করণসমূহ</a></li>
+    <li><a href="#bp4">৪. সম্পূর্ণ প্রোজেক্ট ফাইল ও ফোল্ডার স্কাফোল্ডিং</a></li>
+    <li><a href="#bp5">৫. ডেভেলপমেন্টের ক্রম — ৪০-ধাপের সময়রেখা</a></li>
+    <li><a href="#bp6">৬. ফ্রন্টএন্ড আর্কিটেকচার, কম্পোনেন্টস ও অ্যানিমেশন</a></li>
+    <li><a href="#bp7">৭. ব্যাকএন্ড আর্কিটেকচার ও এপিআই কন্ট্রাক্টস</a></li>
+    <li><a href="#bp8">৮. ইআর ডায়াগ্রাম — বিস্তারিত (SVG ভেক্টর)</a></li>
+    <li><a href="#bp9">৯. পোস্টগ্রেএসকিউএল ডিডিএল — সম্পূর্ণ স্কিমা ও ইনডেক্সসমূহ</a></li>
+    <li><a href="#bp10">১০. ফায়ারস্টোর ডকুমেন্ট মডেল ও নিরাপত্তা নিয়মাবলী</a></li>
+    <li><a href="#bp11">১১. অথেন্টিকেশন ও আরবিএসি — বাস্তবায়নের ধাপসমূহ</a></li>
+    <li><a href="#bp12">১২. সিআই/সিডি পাইপলাইন ও গিটহাব অ্যাকশনস</a></li>
+    <li><a href="#bp13">১৩. টার্মাক্স ডেভ এনভায়রনমেন্ট — সেটআপ গাইড</a></li>
+    <li><a href="#bp14">১৪. টার্মাক্স বুটস্ট্র্যাপ স্ক্রিপ্ট (ডাউনলোডযোগ্য)</a></li>
+    <li><a href="#bp15">১৫. এআই/ইউসরা আর্কিটেকচার ও এম্বেডিংস</a></li>
+    <li><a href="#bp16">১৬. এম্বেডিং স্টোর ও ভেক্টর সার্চ — ডিজাইন নোট</a></li>
+    <li><a href="#bp17">১৭. কেপিআই গণনা ও ড্যাশবোর্ড ডিজাইন</a></li>
+    <li><a href="#bp18">১৮. মনিটরিং, অ্যালার্ট ও রানবুকস</a></li>
+    <li><a href="#bp19">১৯. ব্যাকআপ ও দুর্যোগ পুনরুদ্ধার (DR)</a></li>
+    <li><a href="#bp20">২০. অ্যানিমেশন, টাচ ইউএক্স ও অ্যাক্সেসিবিলিটি (ব্যবহারিক)</a></li>
+    <li><a href="#bp21">২১. উদাহরণ: এন্ড-টু-এন্ড ফ্লো — ইনভয়েস তৈরি (বিস্তারিত)</a></li>
+    <li><a href="#bp22">২২. পর্যবেক্ষণযোগ্যতা (Observability) — লগ ও ট্রেস</a></li>
+    <li><a href="#bp23">২৩. নিরাপত্তা চেকলিস্ট (প্রোডাকশনের আগে অবশ্যই পাশ করতে হবে)</a></li>
+    <li><a href="#bp24">২৪. ডেটা প্রাইভেসি ও কমপ্লায়েন্স</a></li>
+    <li><a href="#bp25">২৫. এআই-এর খরচ নিয়ন্ত্রণ</a></li>
+    <li><a href="#bp26">২৬. টেস্টিং ম্যাট্রিক্স</a></li>
+    <li><a href="#bp27">২৭. প্লেবুক — রোলব্যাক ও ঘটনা প্রতিক্রিয়া</a></li>
+    <li><a href="#bp28">২৮. ডেভ হ্যান্ডঅফ — ডকুমেন্টেশন ও অনবোর্ডিং</a></li>
+    <li><a href="#bp29">২৯. রিপোর্টের জন্য নমুনা SQL ক্যোয়ারী</a></li>
+    <li><a href="#bp30">৩০. ডেটা মাইগ্রেশন কৌশল</a></li>
+    <li><a href="#bp31">৩১. অ্যাডমিন ও মোবাইলের জন্য ইউএক্স প্যাটার্ন</a></li>
+    <li><a href="#bp32">৩২. এক্সপোর্ট ও ইন্টিগ্রেশন — বহিরাগত সিস্টেমসমূহ</a></li>
+    <li><a href="#bp33">৩৩. ফ্রন্টএন্ড কোড স্নিপেট — রিট্রাই সহ এপিআই ক্লায়েন্ট</a></li>
+    <li><a href="#bp34">৩৪. ক্লাউড ফাংশন উদাহরণ (JS) — invoice.create</a></li>
+    <li><a href="#bp35">৩৫. টেমপ্লেট সংগ্রহ ও শুরু করার পদ্ধতি</a></li>
+    <li><a href="#bp36">৩৬. আন্তর্জাতিকীকরণ ও মুদ্রা হ্যান্ডলিং</a></li>
+    <li><a href="#bp37">৩৭. ভবিষ্যতের উন্নতি ও মডেল অপস</a></li>
+    <li><a href="#bp38">৩৮. পরিশিষ্ট A — সম্পূর্ণ পোস্টগ্রেস ডিডিএল ডাউনলোডযোগ্য</a></li>
+    <li><a href="#bp39">৩৯. পরিশিষ্ট B — দরকারী সিএলআই কমান্ড ও সমস্যা সমাধান</a></li>
+    <li><a href="#bp40">৪০. শব্দকোষ, রেফারেন্স ও পরবর্তী পদক্ষেপসমূহ</a></li>
+  </ol>
+</nav>
+
+<a class="anchor" id="bp1"></a>
+<section class="page">
+  <h2>১. সিস্টেমের সংক্ষিপ্ত বিবরণ ও লক্ষ্যসমূহ</h2>
+  <p>এই ম্যানুয়ালটি QGBC প্ল্যাটফর্ম (কোয়ান্টাম গ্লাস বিজনেস ক্লাউড) এবং এর এআই সহকারী "ইউসরা"-কে ডিজাইন, ডেভেলপ, সুরক্ষিত, ডিপ্লয় এবং পরিচালনা করার জন্য প্রয়োজনীয় সবকিছু নথিভুক্ত করে। এটি নন-কোডারদের জন্য যারা সিস্টেমের অভ্যন্তরীণ বিষয়গুলো জানতে চান এবং ইঞ্জিনিয়ারদের জন্য যারা প্রোডাকশন-গ্রেড সরবরাহযোগ্যগুলি বাস্তবায়ন করবেন।</p>
+  <h3>প্রাথমিক লক্ষ্য</h3>
+  <ul>
+    <li>রিয়েল-টাইম অপারেশন এবং একটি ক্যানোনিকাল অ্যাকাউন্টিং লেজার (পোস্টগ্রেস) সহ একটি প্রোডাকশন-রেডি PWA এবং অ্যাডমিন ড্যাশবোর্ড সরবরাহ করা।</li>
+    <li>ডকুমেন্ট প্রক্রিয়াকরণ, অনুমান (estimation) এবং কথোপকথনমূলক সহায়তার জন্য একটি এক্সটেনসিবল এআই স্তর (ইউসরা) সরবরাহ করা।</li>
+    <li>ক্যানারি এবং কোটার মাধ্যমে নির্ভরযোগ্যতা, পর্যবেক্ষণযোগ্যতা (observability), এবং সুরক্ষিত এআই খরচ নিশ্চিত করা।</li>
+  </ul>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp2"></a>
+<section class="page">
+  <h2>২. উচ্চ-স্তরের আর্কিটেকচার ডায়াগ্রাম</h2>
+  <p>হাইব্রিড আর্কিটেকচার — রিয়েলটাইম ইউএক্স এবং অফলাইন সিঙ্কের জন্য ফায়ারস্টোর, ক্যানোনিকাল আর্থিক লেনদেনের জন্য পোস্টগ্রেস (ক্লাউড এসকিউএল), এপিআই এবং এআই প্রক্সির জন্য ক্লাউড ফাংশনস / ক্লাউড রান, এম্বেডিংসের জন্য ভেক্টর ইনডেক্স, ফ্রন্টএন্ড হোস্টিং (ফায়ারবেস হোস্টিং বা ভার্সেল)।</p>
+
+  <div class="diagram" aria-hidden="true">
+    <svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="High level architecture">
+      <rect x="0" y="0" width="1200" height="420" rx="8" fill="#071124"/>
+      <rect x="40" y="40" width="320" height="120" rx="10" fill="#071a1d" stroke="#00FFA3" stroke-width="2"/>
+      <text x="200" y="80" fill="#9fffd0" font-size="14" text-anchor="middle" font-family="sans-serif">রিঅ্যাক্ট পিডব্লিউএ</text>
+      <text x="200" y="102" fill="#cfeee0" font-size="12" text-anchor="middle">টেইলউইন্ড · চার্ট.জেএস · অফলাইন</text>
+      <rect x="440" y="40" width="320" height="120" rx="10" fill="#1a0830" stroke="#FF6EC7" stroke-width="2"/>
+      <text x="600" y="80" fill="#ffc0ea" font-size="14" text-anchor="middle">ক্লাউড ফাংশনস / ক্লাউড রান</text>
+      <text x="600" y="102" fill="#ffd7ef" font-size="12" text-anchor="middle">নোড ২০ · আইডেমপোটেন্ট এপিআই</text>
+      <rect x="820" y="24" width="340" height="64" rx="8" fill="#0b1a10" stroke="#FFD500" stroke-width="2"/>
+      <text x="990" y="46" fill="#fff1a0" font-size="13" text-anchor="middle">পোস্টগ্রেস — লেজার (ACID)</text>
+      <rect x="820" y="106" width="340" height="64" rx="8" fill="#0b1320" stroke="#7fb3ff" stroke-width="2"/>
+      <text x="990" y="128" fill="#d8ecff" font-size="13" text-anchor="middle">ফায়ারস্টোর — রিয়েলটাইম / ইউআই</text>
+      <rect x="440" y="200" width="320" height="120" rx="10" fill="#06152a" stroke="#7fb3ff" stroke-width="2"/>
+      <text x="600" y="240" fill="#cfeeff" font-size="14" text-anchor="middle">ইউসরা এআই লেয়ার</text>
+      <text x="600" y="262" fill="#e6f7ff" font-size="12" text-anchor="middle">এম্বেডিংস + LLM + OCR</text>
+      <defs><marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#bfeeee"/></marker></defs>
+      <line x1="360" y1="100" x2="440" y2="100" stroke="#9fffd0" stroke-width="2" marker-end="url(#ar2)"/>
+      <line x1="760" y1="100" x2="820" y2="70" stroke="#ffc0ea" stroke-width="2" marker-end="url(#ar2)"/>
+      <line x1="760" y1="220" x2="820" y2="220" stroke="#cfeeff" stroke-width="2" marker-end="url(#ar2)"/>
+      <line x1="600" y1="160" x2="600" y2="200" stroke="#ffd27a" stroke-width="1.6" marker-end="url(#ar2)"/>
+    </svg>
+  </div>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp3"></a>
+<section class="page">
+  <h2>৩. টেক স্ট্যাক — উদ্দেশ্য ও পিন করা সংস্করণসমূহ</h2>
+  <p>সুনির্দিষ্ট বিল্ডের জন্য সমস্ত সংস্করণ পিন করা হয়েছে। ড্রিফট প্রতিরোধ করতে লকফাইল এবং CI ক্যাশে ব্যবহার করুন।</p>
+  <h3>ফ্রন্টএন্ড</h3>
+  <ul>
+    <li><strong>React 18.2.0</strong> — মূল ইউআই ফ্রেমওয়ার্ক; কনকারেন্ট বৈশিষ্ট্য এবং ইকোসিস্টেমের স্থিতিশীলতা।</li>
+    <li><strong>TypeScript 5.3.x</strong> — মাঝারি/বড় কোডবেসের জন্য স্ট্যাটিক টাইপিং।</li>
+    <li><strong>Vite 5.x</strong> — দ্রুত ডেভ সার্ভার এবং লীন বিল্ড।</li>
+    <li><strong>Tailwind CSS 3.4.x</strong> — ইউটিলিটি-চালিত প্রতিক্রিয়াশীল স্টাইলিং।</li>
+    <li><strong>Chart.js 4.3.x</strong> — কেপিআই-এর জন্য চার্ট; পারফরম্যান্সের জন্য লেজি লোডিং ব্যবহার করুন।</li>
+  </ul>
+  <h3>ব্যাকএন্ড</h3>
+  <ul>
+    <li><strong>Node.js 20.7.x</strong> — ক্লাউড ফাংশন এবং সার্ভার প্রক্রিয়াগুলির জন্য রানটাইম।</li>
+    <li><strong>Cloud Functions / Cloud Run</strong> — এপিআই এবং ওয়ার্কার জবগুলির জন্য সার্ভারলেস হোস্টিং।</li>
+    <li><strong>Postgres 15</strong> — ক্যানোনিকাল লেজার এবং অ্যাকাউন্টিং ডিবি।</li>
+    <li><strong>Firestore (Native)</strong> — রিয়েলটাইম রিড মডেল এবং মোবাইল অফলাইন সমর্থন।</li>
+    <li><strong>Vertex AI / OpenAI</strong> — সুরক্ষিত প্রক্সি ফাংশনের মাধ্যমে LLMs এবং এম্বেডিংস।</li>
+  </ul>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp4"></a>
+<section class="page">
+  <h2>৪. সম্পূর্ণ প্রোজেক্ট ফাইল ও ফোল্ডার স্কাফোল্ডিং (মনোরেপো)</h2>
+  <p>ওয়ার্কস্পেস সহ প্রোডাকশন-গ্রেড মনোরেপো লেআউট। প্রতিটি প্যাকেজে README এবং .env.example রয়েছে।</p>
+  <pre>
+/qgbc
+├─ README.md
+├─ package.json (workspaces)
+├─ pnpm-lock.yaml
+├─ .github/workflows/
+│  ├─ ci.yml
+│  └─ deploy.yml
+├─ infra/
+│  ├─ terraform/
+│  └─ scripts/
+├─ packages/
+│  ├─ frontend/
+│  │  ├─ public/
+│  │  ├─ src/
+│  │  │  ├─ app/
+│  │  │  ├─ pages/
+│  │  │  ├─ features/
+│  │  │  ├─ components/
+│  │  │  └─ services/
+│  │  ├─ package.json
+│  │  └─ tailwind.config.js
+│  └─ functions/
+│     ├─ src/
+│     │  ├─ handlers/
+│     │  ├─ jobs/
+│     │  ├─ ai/
+│     │  └─ lib/
+│     └─ package.json
+├─ docs/
+│  ├─ architecture.md
+│  └─ runbooks/
+  </pre>
+
+  <p>প্রতিটি প্যাকেজের স্ক্রিপ্টগুলি উন্মুক্ত করা উচিত: <code>dev</code>, <code>build</code>, <code>lint</code>, <code>test</code>। ফাংশন প্যাকেজে ছোট, একক-দায়িত্বের ফাংশন রাখুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৪</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp5"></a>
+<section class="page">
+  <h2>৫. ডেভেলপমেন্টের ক্রম — ৪০-ধাপের সময়রেখা (সংক্ষিপ্ত)</h2>
+  <p>শূন্য থেকে প্রোডাকশনে যাওয়ার জন্য ধাপগুলির একটি উচ্চ-রেজোলিউশন ক্রম নিচে দেওয়া হলো। প্রতিটি আইটেমকে আপনার ইস্যু ট্র্যাকারে একটি কাজ হিসাবে ট্র্যাক করা উচিত এবং এর গ্রহণযোগ্যতার মানদণ্ড (acceptance criteria) থাকা উচিত।</p>
+  <ol>
+    <li>ডোমেন মডেল ও ম্যাপিং সংজ্ঞায়িত করুন: কোন সত্তাগুলি পোস্টগ্রেস বনাম ফায়ারস্টোরে থাকবে তা নির্ধারণ করুন।</li>
+    <li>মনোরেপো শুরু করুন, ওয়ার্কস্পেস তৈরি করুন, প্রাথমিক লকফাইলগুলি কমিট করুন।</li>
+    <li>ক্লাউড প্রোজেক্টগুলি সরবরাহ করুন: Terraform কঙ্কাল ব্যবহার করে dev, stage, prod।</li>
+    <li>CI কঙ্কাল সেট আপ করুন: lint, typecheck, unit tests, build।</li>
+    <li>অথ কঙ্কাল (Firebase Auth) এবং RBAC ডিজাইন ডকুমেন্ট বাস্তবায়ন করুন।</li>
+    <li>ফ্রন্টএন্ড শেল এবং ডিজাইন সিস্টেম তৈরি করুন (Tailwind টোকেন + Storybook)।</li>
+    <li>পোস্টগ্রেস স্কিমা DDL তৈরি করুন এবং ডেভ ডিবিতে মাইগ্রেশন চালান।</li>
+    <li>ফায়ারস্টোর ডকুমেন্ট মডেল তৈরি করুন এবং নিরাপত্তা নিয়মাবলী লিখুন; এমুলেটর দিয়ে পরীক্ষা করুন।</li>
+    <li>ইনভয়েস এপিআই বাস্তবায়ন করুন (আইডেমপোটেন্ট, পোস্টগ্রেসে লেখে)।</li>
+    <li>মিরর জব বাস্তবায়ন করুন: invoice.created → Firestore invoice_view।</li>
+    <li>WPS এক্সপোর্ট মডিউল সহ পেরোল ইন্টিগ্রেশন বাস্তবায়ন করুন।</li>
+    <li>কর্মী তালিকা (worker roster) এবং সার্টিফিকেট আপলোড ফ্লো বাস্তবায়ন করুন।</li>
+    <li>সিইও ড্যাশবোর্ড এবং কেপিআই পুনঃগণনা জব তৈরি করুন (নির্ধারিত)।</li>
+    <li>এআই ইনজেশন পাইপলাইন বাস্তবায়ন করুন (OCR -> এম্বেডিংস -> ভেক্টর স্টোর)।</li>
+    <li>রেট-লিমিট এবং ক্যাচিং সহ এআই ক্যোয়ারী এন্ডপয়েন্ট ইন্টিগ্রেট করুন।</li>
+    <li>গুরুত্বপূর্ণ ফ্লোগুলির জন্য এমুলেটরের বিরুদ্ধে ইন্টিগ্রেশন পরীক্ষা চালান।</li>
+    <li>প্রিভিউ চ্যানেল ডিপ্লয় করুন এবং ম্যানুয়ালি স্মোক পরীক্ষা চালান।</li>
+    <li>সমস্যাগুলি সমাধান করুন, স্টেজিং গ্রহণযোগ্যতার মানদণ্ড চূড়ান্ত করুন।</li>
+    <li>লোড পরীক্ষা চালান এবং ইনডেক্স এবং ফাংশন স্কেলিং টিউন করুন।</li>
+    <li>নিরাপত্তা নিরীক্ষা এবং পেন-টেস্ট সংশোধন সম্পাদন করুন।</li>
+    <li>ক্যানারি ট্র্যাফিক স্প্লিট সহ প্রোডাকশনে ডিপ্লয় করুন।</li>
+    <li>SLOs পর্যবেক্ষণ করুন, ৭২ ঘন্টার জন্য অ্যালার্ট এবং লগ যাচাই করুন।</li>
+    <li>DR ড্রিল পরিচালনা করুন এবং পোস্টগ্রেস/ফায়ারস্টোর পুনরুদ্ধার ধাপগুলি যাচাই করুন।</li>
+    <li>এআই কোটা এবং খরচ অ্যালার্ট সক্ষম করুন।</li>
+    <li>ব্যবহারকারীর প্রতিক্রিয়ার ভিত্তিতে পুনরাবৃত্তি করুন এবং রোডম্যাপ আইটেমগুলি চালিয়ে যান।</li>
+  </ol>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৫</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp6"></a>
+<section class="page">
+  <h2>৬. ফ্রন্টএন্ড আর্কিটেকচার — কম্পোনেন্টস, স্টেট ও অ্যানিমেশন</h2>
+  <h3>কাঠামো ও স্টেট</h3>
+  <ul>
+    <li>ফিচার-প্রথম ফোল্ডার: <code>features/auth</code>, <code>features/projects</code>, ইত্যাদি।</li>
+    <li>ক্যাচিং এবং অপটিমিস্টিক আপডেটের জন্য TanStack Query v5 এর মাধ্যমে সার্ভার স্টেট।</li>
+    <li>শুধুমাত্র ইউআই-এর জন্য Zustand এর মাধ্যমে লোকাল স্লাইস (থিম, মডাল)।</li>
+  </ul>
+
+  <h3>অ্যানিমেশন ও টাচ প্যাটার্ন</h3>
+  <ul>
+    <li>মাইক্রো-ইন্টারঅ্যাকশন: টেইলউইন্ড ট্রানজিশন (duration-150 থেকে 200ms)।</li>
+    <li>জটিল টাইমলাইন: GSAP 3.x হিরো এবং ড্যাশবোর্ড সিকোয়েন্সের জন্য সংরক্ষিত।</li>
+    <li>টাচ: পয়েন্টার ইভেন্টস এপিআই ব্যবহার করুন এবং স্ক্রোল ব্লক করে এমন প্যাসিভ ইভেন্ট লিসেনার এড়িয়ে চলুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৬</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp7"></a>
+<section class="page">
+  <h2>৭. ব্যাকএন্ড আর্কিটেকচার ও এপিআই কন্ট্রাক্টস</h2>
+  <p>এপিআইগুলি পাতলা, আইডেমপোটেন্ট এবং লেনদেনমূলক (transactional)। রাইট-এর জন্য আরপিসি-স্টাইল এন্ডপয়েন্ট (POST /v1/invoices.create) এবং রিড-এর জন্য RESTful পছন্দ করুন।</p>
+
+  <h3>নমুনা কন্ট্রাক্ট: ইনভয়েস তৈরি</h3>
+  <pre>{
+  "idempotency_key": "uuid-v4",
+  "company_id": "uuid",
+  "customer": {"name":"Client A","vat_no":"..."},
+  "lines":[{"description":"Labour","qty":10,"unit_price":100,"tax":5}],
+  "currency":"SAR",
+  "due_date":"2025-12-01"
+}</pre>
+
+  <p>সার্ভারের আচরণ: বৈধতা দিন, পোস্টগ্রেসে ডিবি লেনদেন শুরু করুন, ইনভয়েস ও লাইনস প্রবেশ করান, `invoice.created` ইভেন্ট নির্গত করুন, ফায়ারস্টোরে একটি ডিনরমালাইজড ভিউ মিরর করুন। ইনভয়েস সারাংশ ফেরত দিন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৭</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp8"></a>
+<section class="page">
+  <h2>৮. ইআর ডায়াগ্রাম — বিস্তারিত</h2>
+  <p>নিচে পোস্টগ্রেস লেজার ও মূল সত্ত্বাগুলির জন্য একটি সুসংহত ইআর ডায়াগ্রাম দেওয়া হলো। এই SVGটি ভেক্টর এবং মুদ্রণযোগ্য।</p>
+
+  <div class="diagram" aria-hidden="true">
+    <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1000" height="520" rx="8" fill="#071124"/>
+      <rect x="40" y="40" width="220" height="110" rx="8" fill="#072826" stroke="#00FFA3"/>
+      <text x="150" y="70" fill="#bff8df" font-size="13" text-anchor="middle">কোম্পানি (companies)</text>
+      <text x="150" y="92" fill="#dfffe6" font-size="11" text-anchor="middle">id PK · নাম · ভ্যাট_নং · তৈরি_তারিখ</text>
+      <rect x="300" y="40" width="220" height="110" rx="8" fill="#23103a" stroke="#FF6EC7"/>
+      <text x="410" y="70" fill="#ffc0ea" font-size="13" text-anchor="middle">প্রোজেক্ট (projects)</text>
+      <text x="410" y="92" fill="#ffd7ef" font-size="11" text-anchor="middle">id PK · কোম্পানি_id FK · নাম · বাজেট</text>
+      <rect x="560" y="40" width="220" height="110" rx="8" fill="#2b2f07" stroke="#FFD500"/>
+      <text x="670" y="70" fill="#fff2a4" font-size="13" text-anchor="middle">কর্মী (workers)</text>
+      <text x="670" y="92" fill="#fff4b2" font-size="11" text-anchor="middle">id PK · নাম · দক্ষতা · সার্টিফিকেট (json)</text>
+      <rect x="40" y="190" width="320" height="130" rx="8" fill="#0d1630" stroke="#a6e6ff"/>
+      <text x="200" y="220" fill="#cfeeff" font-size="13" text-anchor="middle">ইনভয়েস (invoices)</text>
+      <text x="200" y="242" fill="#e6f7ff" font-size="11" text-anchor="middle">id PK · কোম্পানি_id FK · মোট_পরিমাণ · স্থিতি</text>
+      <rect x="400" y="190" width="200" height="130" rx="8" fill="#132014" stroke="#9fffd0"/>
+      <text x="500" y="220" fill="#bfeeee" font-size="13" text-anchor="middle">ইনভয়েস লাইন (invoice_lines)</text>
+      <text x="500" y="242" fill="#dfffe6" font-size="11" text-anchor="middle">id PK · ইনভয়েস_id FK · বিবরণ · পরিমাণ · একক_মূল্য</text>
+      <rect x="640" y="190" width="320" height="130" rx="8" fill="#1b0f24" stroke="#ffd27a"/>
+      <text x="800" y="220" fill="#fff0b4" font-size="13" text-anchor="middle">জার্নাল এন্ট্রি (journal_entries)</text>
+      <text x="800" y="242" fill="#ffeeb0" font-size="11" text-anchor="middle">id PK · অ্যাকাউন্ট_id FK · ডেবিট · ক্রেডিট · রেফারেন্স</text>
+
+      <line x1="120" y1="150" x2="360" y2="190" stroke="#bfeeee" stroke-width="1.6" marker-end="url(#ar2)"/>
+      <line x1="420" y1="150" x2="420" y2="190" stroke="#ffd7ef" stroke-width="1.6" marker-end="url(#ar2)"/>
+      <line x1="650" y1="150" x2="700" y2="190" stroke="#ffd27a" stroke-width="1.6" marker-end="url(#ar2)"/>
+      <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#bfeeee"/></marker></defs>
+    </svg>
+  </div>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৮</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp9"></a>
+<section class="page">
+  <h2>৯. পোস্টগ্রেএসকিউএল ডিডিএল — সম্পূর্ণ স্কিমা ও ইনডেক্সসমূহ</h2>
+  <p>মাইগ্রেশনের অংশ হিসাবে আপনার ডেভ পোস্টগ্রেসে (পরিচালিত ক্লাউড এসকিউএল) এই DDL স্টেটমেন্টগুলি চালান। এই পরিবর্তনগুলির সংস্করণ করার জন্য একটি মাইগ্রেশন টুল (Flyway, Liquibase, বা node-pg-migrate) ব্যবহার করুন।</p>
+
+  <pre>
+-- 001_create_accounts_and_core_tables.sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE companies (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  vat_no TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE projects (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  budget NUMERIC(18,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE workers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id),
+  name TEXT NOT NULL,
+  skillset JSONB,
+  certifications JSONB,
+  hourly_rate NUMERIC(12,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id),
+  customer JSONB NOT NULL,
+  total_amount NUMERIC(18,2) NOT NULL,
+  currency TEXT NOT NULL DEFAULT 'SAR',
+  status TEXT NOT NULL DEFAULT 'draft',
+  idempotency_key TEXT UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE invoice_lines (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+  description TEXT,
+  qty NUMERIC(12,3) DEFAULT 1,
+  unit_price NUMERIC(18,2) DEFAULT 0,
+  tax_percent NUMERIC(5,2) DEFAULT 0
+);
+
+CREATE TABLE journal_entries (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  account_id UUID NOT NULL,
+  debit NUMERIC(18,2) DEFAULT 0,
+  credit NUMERIC(18,2) DEFAULT 0,
+  txn_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  reference TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE INDEX idx_invoices_company_status ON invoices(company_id, status);
+CREATE INDEX idx_projects_company ON projects(company_id);
+  </pre>
+
+  <p class="note">নির্দেশিকা: ব্যালেন্স বজায় রাখতে ডিবি-স্তরের সীমাবদ্ধতা এবং ট্রিগার ব্যবহার করুন অথবা প্রতিটি ইনভয়েস পেমেন্টের জন্য <code>journal_entries</code> টেবিলে কাউন্টার-এন্ট্রি পোস্ট করে এমন একটি ডেডিকেটেড ব্যালেন্সিং পরিষেবা লিখুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৯</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp10"></a>
+<section class="page">
+  <h2>১০. ফায়ারস্টোর ডকুমেন্ট মডেল ও নিরাপত্তা নিয়মাবলী (সংক্ষিপ্ত বিবরণ)</h2>
+  <p>ইউআই-এর জন্য ডিনরমালাইজড, দ্রুত-লোডিং ডকুমেন্টগুলি উপস্থাপন করতে ফায়ারস্টোর রিড-মডেলগুলি ব্যবহার করুন। সংবেদনশীল আর্থিক ক্ষেত্রগুলি কেবল পোস্টগ্রেসে অথরিটেটিভ রাখুন।</p>
+
+  <pre>
+// Suggested collections & doc structure (অনুবাদক: প্রস্তাবিত কালেকশন ও ডকুমেন্ট কাঠামো)
+/companies/{companyId}
+/projects/{projectId}
+/projects/{projectId}/workers/{workerId}
+/kpis/{companyId}
+/invoices_view/{invoiceId}   // denormalized copy for UI & history (ইউআই এবং ইতিহাসের জন্য ডিনরমালাইজড কপি)
+    {
+      id, company_id, total_amount, status, created_at,
+      lines: [{ description, qty, unit_price, tax_percent }],
+      customer: {...}
+    }
+  </pre>
+
+  <h3>নিরাপত্তা নিয়মাবলী (নমুনা স্নিপেট)</h3>
+  <pre>
+// firestore.rules (high level)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /companies/{companyId} {
+      allow read: if request.auth != null && request.auth.token.company_id == companyId;
+      allow write: if request.auth.token.role in ['admin','manager'] && request.auth.token.company_id == companyId;
+    }
+
+    match /invoices_view/{invoiceId} {
+      allow read: if request.auth != null && request.auth.token.company_id == resource.data.company_id;
+      allow write: if false; // only server-side mirroring updates this collection (কেবল সার্ভার-সাইড মিররিং এই কালেকশনটি আপডেট করে)
+    }
+  }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১০</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp11"></a>
+<section class="page">
+  <h2>১১. অথেন্টিকেশন ও আরবিএসি — বাস্তবায়নের ধাপসমূহ</h2>
+  <ol>
+    <li>দ্রুত মাল্টি-প্ল্যাটফর্ম অথেন্টিকেশন (ইমেল, ফোন, গুগল) এর জন্য ফায়ারবেস অথ ব্যবহার করুন। পরবর্তীকালে এন্টারপ্রাইজ এসএসও-এর জন্য, SAML/OIDC প্রদানকারীকে ইন্টিগ্রেট করুন।</li>
+    <li>কাস্টম ক্লেইম হিসাবে ভূমিকা নির্ধারণ করুন: <code>role</code> (admin, manager, accountant, worker) এবং <code>company_id</code>। কাস্টম ক্লেইমগুলি সার্ভার-সাইড চেক এবং ফায়ারস্টোর নিয়মাবলীতে ব্যবহৃত হয়।</li>
+    <li>সার্ভার ফাংশনগুলি প্রতিটি অনুরোধে টোকেন যাচাই করে এবং ক্লেইমগুলি পুনরায় পরীক্ষা করে; ক্লায়েন্ট-সাইড ভূমিকার তথ্যের উপর আস্থা রাখবেন না।</li>
+    <li>একটি অডিট ট্রেইল বজায় রাখুন: প্রতিটি সংবেদনশীল ক্রিয়া (ভূমিকা পরিবর্তন, আর্থিক এক্সপোর্ট) পোস্টগ্রেসে একটি অডিট টেবিলে রেকর্ড করা আবশ্যক এবং ঐচ্ছিকভাবে একটি সুরক্ষিত অডিট লগ স্টোরেজে মিরর করা যেতে পারে।</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১১</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp12"></a>
+<section class="page">
+  <h2>১২. সিআই/সিডি — গিটহাব অ্যাকশনস ওয়ার্কফ্লো</h2>
+  <p>দুটি ওয়ার্কফ্লো: <code>ci.yml</code> (PR চেক) এবং <code>deploy.yml</code> (স্টেজিং/প্রোডাকশনে ম্যানুয়ালি গেটেড ডিপ্লয়)।</p>
+
+  <pre name="ci">
+# .github/workflows/ci.yml (excerpt)
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -w lint
+      - run: pnpm -w test
+      - run: pnpm -w build
+  </pre>
+
+  <p>ডিপ্লয় ওয়ার্কফ্লো ম্যানুয়াল অনুমোদন এবং ডিপ্লয় প্রিভিউ ব্যবহার করে। প্রোডাকশন ডিপ্লয়ের জন্য হোস্টেড রানার এবং গিটহাব সিক্রেটে সংরক্ষিত স্বল্পস্থায়ী পরিষেবা অ্যাকাউন্ট কী ব্যবহার করুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১২</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp13"></a>
+<section class="page">
+  <h2>১৩. টার্মাক্স ডেভ এনভায়রনমেন্ট — সেটআপ গাইড</h2>
+  <p>টার্মাক্স অ্যান্ড্রয়েডে একটি লিনাক্স-এর মতো পরিবেশ সরবরাহ করে। এটিকে সাধারণ সম্পাদনা, রেপো সিঙ্ক এবং সীমাবদ্ধ সেটআপে নোড-ভিত্তিক ডেভ সার্ভার চালানোর জন্য ব্যবহার করুন। এটি ভারী লোড (বিল্ড) বা প্রোডাকশন CI-এর জন্য সুপারিশ করা হয় না।</p>
+
+  <h3>পূর্বশর্ত</h3>
+  <ul>
+    <li>একটি নির্ভরযোগ্য উৎস (F-Droid পছন্দনীয়) থেকে টার্মাক্স ইনস্টল করুন।</li>
+    <li>স্টোরেজ অনুমতি দিন: <code>termux-setup-storage</code>।</li>
+    <li>প্যাকেজ ইনস্টল করুন: <code>pkg install git nodejs python clang make openssh</code>।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৩</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp14"></a>
+<section class="page">
+  <h2>১৪. টার্মাক্স বুটস্ট্র্যাপ স্ক্রিপ্ট (ডাউনলোডযোগ্য)</h2>
+  <p>নিচের স্ক্রিপ্টটি আপনার টার্মাক্স ডিভাইসে <code>bootstrap_qgbc.sh</code> হিসাবে সংরক্ষণ করুন, এক্সিকিউটেবল হিসাবে চিহ্নিত করুন (<code>chmod +x</code>), ভেরিয়েবলগুলি সম্পাদনা করুন এবং চালান। এটি টুলচেইন ইনস্টল করে, স্কাফোল্ড ক্লোন করে এবং ফায়ারবেস এমুলেটর শুরু করে (যদি কনফিগার করা থাকে)।</p>
+
+  <pre>
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+# Config — edit before running
+PROJECT_ID="qgbc-dev"
+GIT_REPO="git@github.com:yourname/qgbc.git"
+REPO_DIR="$HOME/qgbc"
+NPM_GLOBAL_PREFIX="$HOME/.npm-global"
+NODE_VERSION="20"
+# Update & packages
+pkg update -y && pkg upgrade -y
+pkg install -y git nodejs python clang make openssh wget
+# npm global prefix
+mkdir -p "$NPM_GLOBAL_PREFIX"
+npm config set prefix "$NPM_GLOBAL_PREFIX"
+export PATH="$NPM_GLOBAL_PREFIX/bin:$PATH"
+echo 'export PATH="'"$NPM_GLOBAL_PREFIX"'/bin:$PATH"' >> ~/.profile
+# Install utilities
+npm install -g pnpm firebase-tools@11.18.0
+# Clone or update repo
+if [ -d "$REPO_DIR" ]; then
+  cd "$REPO_DIR" && git pull
+else
+  git clone "$GIT_REPO" "$REPO_DIR"
+  cd "$REPO_DIR"
+fi
+# Install dependencies
+pnpm install
+# Firebase login: do on desktop and set FIREBASE_TOKEN env if headless
+echo "If browser login required run: firebase login"
+# Start emulator
+firebase emulators:start --only auth,firestore,functions,hosting --project "$PROJECT_ID"
+  </pre>
+
+  <p style="margin-top:8px">এই স্ক্রিপ্টটিকে আপনার রেপো স্কাফোল্ডে একটি ডাউনলোডযোগ্য ফাইলে তৈরি করতে, <code>packages/tooling/bootstrap_qgbc.sh</code> তৈরি করুন এবং কমিট করুন। টার্মাক্স বা লিনাক্স শেলের মাধ্যমে স্ক্রিপ্টটি ব্যবহার করুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৪</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp15"></a>
+<section class="page">
+  <h2>১৫. এআই / ইউসরা আর্কিটেকচার — ইনজেশন ও ইনফারেন্স</h2>
+  <p>ইউসরা তিনটি সাবসিস্টেম নিয়ে গঠিত: ইনজেশন (OCR ও পার্সিং), ভেক্টরাইজেশন (এম্বেডিংস ও ভেক্টর স্টোর), এবং ইনফারেন্স (LLM)। এআই প্রক্সি ফাংশনটি কোটা এবং ক্যাচিং প্রয়োগ করে।</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1000" height="320" rx="8" fill="#071124"/>
+      <rect x="40" y="28" width="240" height="80" rx="8" fill="#061a22" stroke="#7ff3d1"/>
+      <text x="160" y="56" fill="#bff8df" font-size="13" text-anchor="middle">ইনজেশন</text>
+      <text x="160" y="76" fill="#dfffe6" font-size="11" text-anchor="middle">OCR -> পার্স করা JSON</text>
+      <rect x="360" y="28" width="240" height="80" rx="8" fill="#121034" stroke="#ffd27a"/>
+      <text x="480" y="56" fill="#fff0b4" font-size="13" text-anchor="middle">ভেক্টরাইজেশন</text>
+      <text x="480" y="76" fill="#ffeeb0" font-size="11" text-anchor="middle">এম্বেডিংস -> ভেক্টর ইনডেক্স</text>
+      <rect x="680" y="28" width="240" height="80" rx="8" fill="#081a2a" stroke="#a6e6ff"/>
+      <text x="800" y="56" fill="#cfeeff" font-size="13" text-anchor="middle">ইনফারেন্স</text>
+      <text x="800" y="76" fill="#e6f7ff" font-size="11" text-anchor="middle">LLM / RAG ও প্রম্পটস</text>
+      <defs><marker id="m3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#bfeeee"/></marker></defs>
+      <line x1="280" y1="68" x2="360" y2="68" stroke="#bfeeee" stroke-width="2" marker-end="url(#m3)"/>
+      <line x1="600" y1="68" x2="680" y2="68" stroke="#ffd27a" stroke-width="2" marker-end="url(#m3)"/>
+    </svg>
+  </div>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৫</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp16"></a>
+<section class="page">
+  <h2>১৬. এম্বেডিং স্টোর ও ভেক্টর সার্চ — ডিজাইন নোট</h2>
+  <ul>
+    <li>যদি উপলব্ধ থাকে তবে একটি পরিচালিত ভেক্টর ইনডেক্স ব্যবহার করুন (Vertex Matching Engine, Pinecone, বা Qdrant Cloud) — এটি অপারেশনাল ওভারহেড এড়ায়।</li>
+    <li>মূল ডকুমেন্টগুলির (GCS URLs) মেটাডেটা পয়েন্টার এবং কনটেক্সটের জন্য ছোট স্নিপেটগুলি সংরক্ষণ করুন।</li>
+    <li>সংস্করণযুক্ত ইনডেক্স বজায় রাখুন: যখন ডকুমেন্ট পরিবর্তিত হয়, তখন এম্বেডিংস অ্যাসিঙ্ক্রোনাসলি আপডেট করুন এবং ধারাবাহিক RAG পুনরুদ্ধারের জন্য সংস্করণগুলি ট্র্যাক করুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৬</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp17"></a>
+<section class="page">
+  <h2>১৭. কেপিআই গণনা ও ড্যাশবোর্ড ডিজাইন</h2>
+  <h3>আর্কিটেকচার</h3>
+  <p>নির্ধারিত ব্যাকগ্রাউন্ড জবগুলিতে কেপিআই গণনা করুন (Cloud Scheduler -> Cloud Function)। ক্লায়েন্টদের সাবস্ক্রাইব করার জন্য প্রতি কোম্পানির জন্য এগ্রিগেটেড কেপিআই ডকুমেন্টগুলি ফায়ারস্টোরে কমিট করুন: /kpis/{companyId}। ঐতিহাসিক প্রবণতার জন্য BigQuery-এ গ্লোবাল এগ্রিগেট বজায় রাখুন।</p>
+
+  <h3>নমুনা কেপিআই</h3>
+  <ul>
+    <li>মাসিক রাজস্ব, প্রাপ্যগুলির বয়স (Receivables Aging), হাতে নগদ অর্থ</li>
+    <li>কর্মী ব্যবহারের হার, প্রতি কর্মীর গড় মার্জিন</li>
+    <li>প্রোজেক্ট বার্ন রেট এবং অর্জিত মূল্য</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৭</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp18"></a>
+<section class="page">
+  <h2>১৮. মনিটরিং, অ্যালার্ট ও রানবুকস</h2>
+  <ul>
+    <li>গুরুত্বপূর্ণ অ্যালার্ট: পরিষেবা ডাউন, ত্রুটির হার থ্রেশহোল্ডের উপরে, এআই খরচের স্পাইক।</li>
+    <li>আপটাইম চেক এবং ফাংশন মেট্রিক্সের জন্য ক্লাউড মনিটরিং ব্যবহার করুন; গুরুত্বপূর্ণ অ্যালার্ট PagerDuty-এ ফরোয়ার্ড করুন।</li>
+    <li>/docs/runbooks-এর অধীনে ধাপে ধাপে প্রতিকারমূলক কমান্ড এবং প্রয়োজনীয় ভূমিকা সহ রানবুক বজায় রাখুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৮</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp19"></a>
+<section class="page">
+  <h2>১৯. ব্যাকআপ ও দুর্যোগ পুনরুদ্ধার (DR)</h2>
+  <h3>পোস্টগ্রেস</h3>
+  <ol>
+    <li>লাইফসাইকেল নিয়ম (30/90/365 দিন) সহ ক্লাউড স্টোরেজে দৈনিক লজিক্যাল ব্যাকআপ (pg_dump)।</li>
+    <li>মাসিক পুনরুদ্ধার পরীক্ষা করুন: একটি ডেভ ইনস্ট্যান্সে পুনরুদ্ধার করুন এবং যাচাইকরণ স্ক্রিপ্ট চালান।</li>
+  </ol>
+  <h3>ফায়ারস্টোর</h3>
+  <ul>
+    <li>দৈনিক GCS-এ ফায়ারস্টোর এক্সপোর্ট ব্যবহার করুন। দ্রুত পুনরুদ্ধারের জন্য এক সপ্তাহের রোলিং স্ন্যাপশট রাখুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ১৯</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp20"></a>
+<section class="page">
+  <h2>২০. অ্যানিমেশন, টাচ ইউএক্স ও অ্যাক্সেসিবিলিটি (ব্যবহারিক)</h2>
+  <ul>
+    <li>মাইক্রো অ্যানিমেশন: প্রেস, হোভার এবং তালিকা আপডেটের জন্য ১০০–২০০ms ট্রানজিশন।</li>
+    <li>লার্জ অ্যানিমেশন: ৩০০–৬০০ms স্তরযুক্ত ইজিং সহ এবং prefers-reduced-motion এর মাধ্যমে এড়িয়ে যাওয়ার ক্ষমতা।</li>
+    <li>টাচ: পয়েন্টারমুভে ন্যূনতম প্রধান-থ্রেড কাজ নিশ্চিত করুন; স্ক্রোলের জন্য requestAnimationFrame এবং প্যাসিভ ইভেন্ট ব্যবহার করুন।</li>
+    <li>অ্যাক্সেসিবিলিটি: সমস্ত ইন্টারেক্টিভ কম্পোনেন্টের জন্য রঙের বৈসাদৃশ্য, কীবোর্ড ফোকাস এবং স্ক্রিন রিডার লেবেল।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২০</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp21"></a>
+<section class="page">
+  <h2>২১. উদাহরণ: এন্ড-টু-এন্ড ফ্লো — ইনভয়েস তৈরি (বিস্তারিত)</h2>
+  <ol>
+    <li>ক্লায়েন্ট ইউএক্স ইনভয়েস ড্রাফ্ট তৈরি করে এবং idempotency_key সহ তৈরির অনুরোধ করে।</li>
+    <li>এপিআই যাচাই করে এবং একটি invoices.create ক্লাউড ফাংশনে ফরোয়ার্ড করে।</li>
+    <li>ফাংশনটি পোস্টগ্রেসে ডিবি লেনদেন শুরু করে, ইনভয়েস প্রবেশ করায়, মোট গণনা করে, invoice_lines প্রবেশ করায়, কমিট করে।</li>
+    <li>ফাংশনটি Pub/Sub-এ <code>invoice.created</code> ইভেন্ট প্রকাশ করে।</li>
+    <li>মিরর ওয়ার্কার টপিকটি সাবস্ক্রাইব করে, ইউআই এবং অনুসন্ধানের জন্য ইনভয়েসটি ফায়ারস্টোরে ডিনরমালাইজ করে।</li>
+    <li>ইমেল/এসএমএস এর মাধ্যমে অ্যাকাউন্টগুলিকে অবহিত করুন এবং অডিট টেবিলে এন্ট্রি যোগ করুন।</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২১</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp22"></a>
+<section class="page">
+  <h2>২২. পর্যবেক্ষণযোগ্যতা (Observability) — লগ ও ট্রেস</h2>
+  <p>ক্ষেত্রগুলি সহ স্ট্রাকচার্ড JSON লগ ব্যবহার করুন: <code>request_id</code>, <code>user_id</code>, <code>company_id</code>, <code>latency_ms</code>। ক্লাউড ট্রেসে (OpenTelemetry) ট্রেস এক্সপোর্ট করুন। লগ এবং ট্রেস লিঙ্ক করতে ক্লায়েন্ট এবং সার্ভার জুড়ে পারস্পরিক সম্পর্ক আইডি ব্যবহার করুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২২</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp23"></a>
+<section class="page">
+  <h2>২৩. নিরাপত্তা চেকলিস্ট (প্রোডাকশনের আগে অবশ্যই পাশ করতে হবে)</h2>
+  <ul>
+    <li>সমস্ত এন্ডপয়েন্টের জন্য টোকেন যাচাইকরণ এবং ভূমিকা চেক প্রয়োজন।</li>
+    <li>সিক্রেট ম্যানেজার-এ গোপন তথ্য; রেপোতে কোনো গোপন তথ্য নেই।</li>
+    <li>CI-এ ডিপেন্ডেন্সি স্ক্যানিং সক্ষম করা হয়েছে এবং গুরুত্বপূর্ণ দুর্বলতাগুলি স্বয়ংক্রিয়ভাবে ব্লক করা।</li>
+    <li>উচ্চ/গুরুত্বপূর্ণ ত্রুটিগুলি সমাধান সহ অনুপ্রবেশ পরীক্ষা সম্পন্ন হয়েছে।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৩</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp24"></a>
+<section class="page">
+  <h2>২৪. ডেটা প্রাইভেসি ও কমপ্লায়েন্স</h2>
+  <p>আপনার এখতিয়ারে PII হিসাবে কী গণনা করা হয় তা চিহ্নিত করুন, ন্যূনতমভাবে সংরক্ষণ করুন এবং স্থির অবস্থায় সংবেদনশীল ক্ষেত্রগুলিকে এনক্রিপ্ট করুন। স্থানীয় নিয়মাবলী মেনে চলার জন্য ডেটা এক্সপোর্ট এবং মুছে ফেলার ওয়ার্কফ্লো সরবরাহ করুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৪</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp25"></a>
+<section class="page">
+  <h2>২৫. এআই-এর খরচ নিয়ন্ত্রণ</h2>
+  <ul>
+    <li>প্রতি-সংস্থা মাসিক বাজেট ক্যাপ প্রয়োগ করুন এবং থ্রেশহোল্ডের বাইরে এআই কলগুলি থ্রোটল করুন।</li>
+    <li>সাধারণ ক্যোয়ারী এবং ফলাফল ক্যাশে করুন; একটি Redis ক্যাশে স্তর বা ফায়ারস্টোর TTL ডকস ব্যবহার করুন।</li>
+    <li>সাধারণ কাজের জন্য ছোট মডেল ব্যবহার করুন এবং শুধুমাত্র জটিল ক্যোয়ারীগুলির জন্য বড় LLM কল সংরক্ষণ করুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৫</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp26"></a>
+<section class="page">
+  <h2>২৬. টেস্টিং ম্যাট্রিক্স</h2>
+  <ul>
+    <li>পিওর ফাংশন এবং ইউটিলিটির জন্য ইউনিট পরীক্ষা — লক্ষ্য ৮০%+</li>
+    <li>ইন্টিগ্রেশন পরীক্ষা: এমুলেটর-ভিত্তিক ফায়ারস্টোর নিয়মাবলী, ফাংশন ট্রিগার</li>
+    <li>E2E (Playwright): গুরুত্বপূর্ণ ফ্লো (সাইন-ইন, ইনভয়েস তৈরি, পেরোল এক্সপোর্ট)</li>
+    <li>লোড টেস্টিং: এপিআই এন্ডপয়েন্টগুলিতে সিমুলেটেড কনকারেন্ট ব্যবহারকারীদের জন্য k6 স্ক্রিপ্ট</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৬</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp27"></a>
+<section class="page">
+  <h2>২৭. প্লেবুক — রোলব্যাক ও ঘটনা প্রতিক্রিয়া</h2>
+  <ol>
+    <li>গুরুতর ত্রুটির ক্ষেত্রে: অবিলম্বে পূর্ববর্তী হোস্টিং স্ন্যাপশট এবং ফাংশন সংশোধনে প্রত্যাবর্তন করুন।</li>
+    <li>গুরুত্ব শ্রেণীবিভাগ সহ একটি ঘটনা খুলুন, স্টেকহোল্ডারদের অবহিত করুন এবং রানবুকের ধাপগুলি চালান।</li>
+    <li>নিয়ন্ত্রণের পরে, মূল কারণ বিশ্লেষণ চালান এবং ৭২ ঘন্টার মধ্যে পোস্টমর্টেম প্রকাশ করুন।</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৭</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp28"></a>
+<section class="page">
+  <h2>২৮. ডেভ হ্যান্ডঅফ — ডকুমেন্টেশন ও অনবোর্ডিং</h2>
+  <ul>
+    <li>আর্কিটেকচার, এপিআই স্পেকস, রানবুকস এবং অনবোর্ডিং চেকলিস্ট সহ /docs-এ ডকুমেন্ট বজায় রাখুন।</li>
+    <li>কম্পোনেন্ট ডকুমেন্টেশন এবং লাইভ ইউআই উদাহরণগুলির জন্য Storybook ব্যবহার করুন।</li>
+    <li>একজন ডেভেলপার চেকলিস্ট রাখুন: এনভায়রনমেন্ট ভেরিয়েবল, পরিষেবা অ্যাকাউন্ট ধাপ এবং স্থানীয় এমুলেটর কমান্ড।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৮</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp29"></a>
+<section class="page">
+  <h2>২৯. রিপোর্টের জন্য নমুনা SQL ক্যোয়ারী</h2>
+  <pre>
+-- Monthly revenue by company (প্রতি কোম্পানি মাসিক রাজস্ব)
+SELECT company_id, date_trunc('month', created_at) AS month, SUM(total_amount) AS revenue
+FROM invoices
+WHERE status = 'paid'
+GROUP BY company_id, month
+ORDER BY month DESC;
+
+-- Worker profitability: revenue attributed / total cost (কর্মী লাভজনকতা: আরোপিত রাজস্ব / মোট খরচ)
+-- Requires mapping of worker assignments to invoice lines (join table) (ইনভয়েস লাইনগুলিতে কর্মী অ্যাসাইনমেন্টের ম্যাপিং প্রয়োজন)
+  </pre>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ২৯</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp30"></a>
+<section class="page">
+  <h2>৩০. ডেটা মাইগ্রেশন কৌশল</h2>
+  <ol>
+    <li>যদি স্প্রেডশীট থেকে মাইগ্রেট করা হয়: CSV স্কিমা সংজ্ঞায়িত করুন এবং বৈধতা এবং পোস্টগ্রেসে লোড করার জন্য ETL স্ক্রিপ্ট লিখুন; idempotency কী তৈরি করুন।</li>
+    <li>পোস্টগ্রেস সোর্স-অফ-ট্রুথ থেকে ফায়ারস্টোর মিরর তৈরি করতে মাইগ্রেশন জব লিখুন।</li>
+    <li>স্টেজিং-এ ড্রাই-রান চালান এবং সমতা নিশ্চিত করতে এগ্রিগেটগুলি তুলনা করুন।</li>
+  </ol>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩০</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp31"></a>
+<section class="page">
+  <h2>৩১. অ্যাডমিন ও মোবাইলের জন্য ইউএক্স প্যাটার্ন</h2>
+  <ul>
+    <li>অ্যাডমিন: রিসাইজযোগ্য সাইডবার সহ মাল্টি-কলাম লেআউট, ইনভয়েস এবং কর্মীদের জন্য বাল্ক অ্যাকশন।</li>
+    <li>মোবাইল: একক কলাম, ভেঙে পড়ার যোগ্য বিভাগ, ঘন টেবিলের জন্য প্রগ্রেসিভ ডিসক্লোজার।</li>
+    <li>ফর্ম: অসমাপ্ত গুরুত্বপূর্ণ ফর্মগুলির জন্য অটোসেভ ড্রাফ্ট এবং ব্যাক নেভিগেশন নিশ্চিত করুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩১</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp32"></a>
+<section class="page">
+  <h2>৩২. এক্সপোর্ট ও ইন্টিগ্রেশন — বহিরাগত সিস্টেমসমূহ</h2>
+  <p>পেরোল (WPS), তৃতীয় পক্ষের অ্যাকাউন্টিং প্যাকেজ এবং ব্যাংক স্থানান্তরের জন্য CSV, PDF এক্সপোর্ট এবং ইন্টিগ্রেশন এন্ডপয়েন্ট সমর্থন করুন। সুরক্ষিত ডাউনলোডের জন্য স্বাক্ষরিত URL ব্যবহার করুন এবং ভারী PDF তৈরি করতে ব্যাকগ্রাউন্ড জব (ক্লাউড রানে Puppeteer এর মাধ্যমে) ব্যবহার করুন।</p>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩২</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp33"></a>
+<section class="page">
+  <h2>৩৩. ফ্রন্টএন্ড কোড স্নিপেট — রিট্রাই সহ এপিআই ক্লায়েন্ট</h2>
+  <pre>
+import axios from 'axios';
+import { getAuthToken } from './auth';
+
+const api = axios.create({ baseURL: process.env.API_URL, timeout:15000 });
+
+api.interceptors.request.use(async config => {
+  const token = await getAuthToken();
+  if(token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export async function postWithRetry(url, data, retries = 2){
+  for(let i=0;i<=retries;i++){
+    try { return await api.post(url, data); }
+    catch(err){ if(i===retries) throw err; await new Promise(r=>setTimeout(r, 500*(i+1))); }
+  }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৩</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp34"></a>
+<section class="page">
+  <h2>৩৪. ক্লাউড ফাংশন উদাহরণ (JS) — invoice.create</h2>
+  <pre>
+// functions/src/handlers/invoices.js (simplified)
+import { pool } from '../lib/db';
+import { pubsubClient } from '../lib/pubsub';
+
+export async function createInvoice(req, res){
+  const { idempotency_key, company_id, customer, lines } = req.body;
+  // validate...
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    // check idempotency
+    const r = await client.query('SELECT id FROM invoices WHERE idempotency_key=$1', [idempotency_key]);
+    if(r.rowCount) { await client.query('COMMIT'); return res.json({ id: r.rows[0].id }); }
+    const insert = await client.query(
+      'INSERT INTO invoices(company_id, customer, total_amount, idempotency_key) VALUES($1,$2,$3,$4) RETURNING id',
+      [company_id, customer, /* compute total */, idempotency_key]
+    );
+    const invoiceId = insert.rows[0].id;
+    // insert lines...
+    await client.query('COMMIT');
+    await pubsubClient.publish('invoice.created', { invoiceId, company_id });
+    res.json({ id: invoiceId });
+  } catch(e){
+    await client.query('ROLLBACK'); throw e;
+  } finally { client.release(); }
+}
+  </pre>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৪</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp35"></a>
+<section class="page">
+  <h2>৩৫. টেমপ্লেট সংগ্রহ ও শুরু করার পদ্ধতি</h2>
+  <ul>
+    <li>প্রোডাকশন কম্পোনেন্টের জন্য Tailwind UI ব্যবহার করুন; আপনার ব্র্যান্ড প্যালেটে টোকেনগুলি মানিয়ে নিন।</li>
+    <li>প্রাথমিক প্রোটোটাইপগুলির জন্য Creative Tim বা ThemeWagon থেকে অ্যাডমিন ড্যাশবোর্ড টেমপ্লেট ডাউনলোড করুন (লাইসেন্স পর্যালোচনা করুন)।</li>
+    <li>ডিজাইনার/ডেভেলপারদের জন্য কম্পোনেন্ট ক্যাটালগিং এবং লাইভ নিয়মগুলির জন্য Storybook ব্যবহার করুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৫</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp36"></a>
+<section class="page">
+  <h2>৩৬. আন্তর্জাতিকীকরণ ও মুদ্রা হ্যান্ডলিং</h2>
+  <ul>
+    <li>ক্ষুদ্রতম ইউনিটে (যেমন, হালালা) আর্থিক মান সংরক্ষণ করুন অথবা নির্দিষ্ট নির্ভুলতা NUMERIC(18,2) ব্যবহার করুন এবং ইনভয়েসে মুদ্রা কোড রাখুন।</li>
+    <li>ফ্রন্টএন্ডে ব্যবহারকারীর স্থান অনুসারে পরিমাণ ও তারিখ বিন্যাস করার জন্য Intl API ব্যবহার করুন।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৬</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp37"></a>
+<section class="page">
+  <h2>৩৭. ভবিষ্যতের উন্নতি ও মডেল অপস</h2>
+  <ul>
+    <li>মডেল মনিটরিং: ড্রিফট সনাক্তকরণ, আউটপুট বৈধতা এবং ফলব্যাক প্রতিক্রিয়া।</li>
+    <li>উল্লেখযোগ্য ড্রিফট বা ব্যবসায়িক নিয়মের পরিবর্তনের ভিত্তিতে স্বয়ংক্রিয় রিট্রেন ট্রিগার।</li>
+    <li>ভাড়াটেদের জুড়ে সহজেই টগল করার জন্য এআই বৈশিষ্ট্যগুলির জন্য ফিচার ফ্ল্যাগ।</li>
+  </ul>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৭</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp38"></a>
+<section class="page">
+  <h2>৩৮. পরিশিষ্ট A — সম্পূর্ণ পোস্টগ্রেস ডিডিএল ডাউনলোডযোগ্য</h2>
+  <p>নিচে একটি একত্রিত DDL ফাইল কন্টেন্ট দেওয়া হলো যা আপনি <code>db/migrations/001_initial.sql</code> হিসাবে সংরক্ষণ করতে পারেন।</p>
+  <pre>
+-- (আগের পৃষ্ঠাগুলিতে স্কিমা দেখুন) সমস্ত CREATE TABLE স্টেটমেন্টগুলি এখানে রাখুন, সাথে মাইগ্রেশন মেটাডেটা এবং সংস্করণ টেবিল।
+  </pre>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৮</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp39"></a>
+<section class="page">
+  <h2>৩৯. পরিশিষ্ট B — দরকারী সিএলআই কমান্ড ও সমস্যা সমাধান</h2>
+  <ul>
+    <li>এমুলেটর শুরু করুন: <code>firebase emulators:start --only auth,firestore,functions,hosting</code></li>
+    <li>মাইগ্রেশন চালান: <code>pnpm --filter functions run migrate</code></li>
+    <li>লগগুলি পরিদর্শন করুন: <code>firebase functions:log --project qgbc-dev</code></li>
+  </ul>
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৩৯</span><span></span></p>
+</section>
+
+<a class="anchor" id="bp40"></a>
+<section class="page">
+  <h2>৪০. শব্দকোষ, রেফারেন্স ও পরবর্তী পদক্ষেপসমূহ</h2>
+  <h3>শব্দকোষ</h3>
+  <ul>
+    <li><strong>PWA</strong>: প্রগ্রেসিভ ওয়েব অ্যাপ</li>
+    <li><strong>ACID</strong>: অ্যাটোমিসিটি, কনসিস্টেন্সি, আইসোলেশন, ডিউরাবিলিটি</li>
+    <li><strong>LLM</strong>: লার্জ ল্যাঙ্গুয়েজ মডেল</li>
+  </ul>
+
+  <h3>রেফারেন্স</h3>
+  <ul>
+    <li>Firebase ডকুমেন্টেশন — ফায়ারস্টোর, অথ, এমুলেটর</li>
+    <li>পোস্টগ্রেস ডকুমেন্টেশন — ইনডেক্সিং ও সীমাবদ্ধতা</li>
+    <li>এম্বেডিংস ও ইনফারেন্সের জন্য Vertex AI / OpenAI ডকস</li>
+  </ul>
+
+  <p style="margin-top:12px">পরবর্তী পদক্ষেপ (ব্যবহারিক): এই ফাইলটি <code>QGBC_Full_Hybrid_Manual.html</code> হিসাবে সংরক্ষণ করুন, এটি খুলুন এবং বিতরণের জন্য PDF এ এক্সপোর্ট করুন। মোবাইল-প্রথম ডেভ সক্ষম করতে অবিলম্বে রেপো স্কাফোল্ড তৈরি করুন এবং <code>packages/tooling</code> এর অধীনে টার্মাক্স বুটস্ট্র্যাপ কমিট করুন।</p>
+
+  <div style="margin-top:12px">
+    <a class="download" href="#bp14">টার্মাক্স বুটস্ট্র্যাপ স্ক্রিপ্টে যান (পৃষ্ঠা ১৪)</a>
+  </div>
+
+  <p class="footer"><span class="pageno">পৃষ্ঠা ৪০</span><span></span></p>
+</section>
+</div>
+</div>
+
+<script>
+  // Insert generated date for both English and Bangla headers
+  const date = new Date().toLocaleString();
+  document.querySelectorAll('header .meta + .meta').forEach(el => {
+    el.textContent = 'Generated: ' + date;
+  });
+</script>
+</body>
+</html>
