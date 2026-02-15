@@ -19,11 +19,11 @@ import {
 import jsQR from 'jsqr';
 import { NeonButton, NeonInput, NeonCard, Modal, PageTransition } from './components/UI';
 import { QRCodeDisplay } from './components/QRCodeGenerator';
-import { encryptData, decryptData, hashPin, generateSelfSignedCertificate } from '../cryptoService';
-import { analyzeImageForVault, generateSecurePassword } from '../geminiService';
-import { registerBiometrics, authenticateBiometrics } from '../webauthnService';
-import { db } from '../db';
-import { exportToPDF, exportToXLSX, exportToDOCX, convertToCSV, downloadFile } from '../exportUtils';
+import { encryptData, decryptData, hashPin, generateSelfSignedCertificate } from './services/cryptoService';
+import { analyzeImageForVault, generateSecurePassword } from './services/geminiService';
+import { registerBiometrics, authenticateBiometrics } from './services/webauthnService';
+import { db } from './services/db';
+import { exportToPDF, exportToXLSX, exportToDOCX, convertToCSV, downloadFile } from './services/exportUtils';
 import { VaultItem, VaultItemType, UserConfig, UserProfile, AppCustomization } from './types';
 
 const APP_CUSTOMIZATION_KEY = 'QAV_APP_CUSTOMIZATION';
