@@ -1,1 +1,16 @@
-{"version":2,"builds":[{"src":"path/to/your/source","use":"@vercel/static"}],"routes":[{"src":"/(.*)","dest":"path/to/your/source/$1"}],"env":{"API_KEY":"your_api_key_value","ANOTHER_VARIABLE":"another_value"},"optimizations":{"minifyCSS":true,"minifyJS":true}}
+{
+  "version": 2,
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    },
+    "command": "npm run build",
+    "outputDirectory": "dist"
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
