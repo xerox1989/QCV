@@ -1,94 +1,57 @@
+# Complete 3-Platform Deployment Guide  
 
-# Quantum Authentication Vault (QAV) - Production Guide
+## Web Deployment to Vercel  
+### Environment Setup  
+1. Create a Vercel account if you don't have one.  
+2. Install the Vercel CLI:  
+   ```bash  
+   npm install -g vercel  
+   ```  
+3. Log in to Vercel:  
+   ```bash  
+   vercel login  
+   ```  
+4. Create a new project via the CLI or the Vercel dashboard.  
 
-This guide details the procedures for deploying QAV v8.0 to Web, Windows, and Android.
+### Deploying Your Application  
+1. Run the following command in your project directory:  
+   ```bash  
+   vercel  
+   ```  
+2. Follow the prompts to complete the deployment.  
 
----
+## Windows Desktop Electron .exe Build with Packaging  
+1. Ensure you have Node.js and npm installed.  
+2. Install Electron and Electron Packager:  
+   ```bash  
+   npm install electron --save-dev  
+   npm install electron-packager --save-dev  
+   ```  
+3. Add a build script to your `package.json`:  
+   ```json  
+   "scripts": {  
+       "build": "electron-packager . "YourAppName" --platform=win32 --arch=x64"  
+   }  
+   ```  
+4. Run the build command:  
+   ```bash  
+   npm run build  
+   ```  
+5. Find your .exe in the output directory.  
 
-## 1. Environment Requirements
-*   **Google Gemini API Key:** Ensure your `process.env.API_KEY` is valid.
-*   **NeonDB:** Verify the database connection string is active.
-*   **Node.js:** v18.x or higher.
-*   **Android Studio:** Required for Play Store packaging.
-
----
-
-## 2. Web Application Deployment (Recommended: Vercel/Netlify)
-The web version is the foundation for all other platforms.
-
-1.  **Build the Project:**
-    ```bash
-    npm install
-    npm run build
-    ```
-2.  **Configure Environment Variables:**
-    In your hosting provider dashboard (Vercel/Netlify/Firebase), add:
-    *   `API_KEY`: Your Google GenAI Key.
-3.  **Deployment:**
-    Upload the `dist/` folder. Ensure the platform supports SPA routing.
-
----
-
-## 3. Windows Desktop Application (.EXE)
-We use **Electron** to wrap the React application into a native Windows executable.
-
-1.  **Installation:**
-    ```bash
-    npm install electron electron-builder --save-dev
-    ```
-2.  **Configuration:**
-    Ensure `electron-main.js` and `preload.js` are in your root.
-3.  **Build EXE:**
-    ```bash
-    npm run electron-build
-    ```
-    *This will generate a portable `.exe` and a setup installer in the `dist_electron/` folder.*
-
----
-
-## 4. Android Version (Google Play Store)
-We use **Capacitor** to bridge the web app to native Android.
-
-1.  **Add Capacitor:**
-    ```bash
-    npm install @capacitor/core @capacitor/cli @capacitor/android
-    npx cap init QAV com.quantum.vault
-    ```
-2.  **Build and Sync:**
-    ```bash
-    npm run build
-    npx cap add android
-    npx cap copy
-    npx cap sync
-    ```
-3.  **Android Studio Workflow:**
-    ```bash
-    npx cap open android
-    ```
-    *   In Android Studio, go to **Build > Generate Signed Bundle / APK**.
-    *   Follow the Google Play instructions to create a Keystore and sign your `.aab` file.
-4.  **Hardware Permissions:**
-    Ensure `AndroidManifest.xml` includes:
-    ```xml
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    ```
-
----
-
-## 5. Security Checklist for Launch
-- [ ] **API Key Restriction:** Restrict your Gemini API key to only your domain/bundle ID in the Google Cloud Console.
-- [ ] **Minification:** Ensure all code is minified and obfuscated in production.
-- [ ] **SSL/HTTPS:** Native apps and web must serve over HTTPS for WebCrypto and Biometrics to work.
-- [ ] **Database Backup:** Enable periodic snapshots in your NeonDB dashboard.
-
----
-
-## 6. Play Store / Store Metadata
-*   **Name:** Quantum Authentication Vault
-*   **Category:** Tools / Security
-*   **Age Rating:** 3+
-*   **Privacy Policy:** Must state that images for AI analysis are processed ephemerally.
-
----
-*Created by Quantum Vault Engineering Team*
+## Android Google Play Store Deployment with Capacitor Integration and APK Generation Steps  
+1. Install Capacitor if not already done:  
+   ```bash  
+   npm install @capacitor/core @capacitor/cli  
+   ```  
+2. Initialize Capacitor in your project:  
+   ```bash  
+   npx cap init  
+   ```  
+3. Modify your `capacitor.config.json` for Android settings.  
+4. Build your app and generate the APK:  
+   ```bash  
+   npx cap build android  
+   ```  
+5. Once the build is complete, locate the APK in the `android/app/build/outputs/apk/debug` directory.  
+6. Follow Play Store guidelines for deployment.
