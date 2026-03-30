@@ -1,10 +1,21 @@
-
+// preload.js
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electronAPI', {
-  // Expose specific capabilities to the renderer
-  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
-  quitApp: () => ipcRenderer.send('app-quit'),
-  // We can add native file system access or other OS integrations here later
-  platform: process.platform
+// Whitelisted IPC channels
+const whitelistedChannels = ['sendMessage', 'receiveMessage'];
+
+contextBridge.exposeInMainWorld('api', {
+    // Limited API methods
+    sendMessage: (data) => {
+        ipcRenderer.send('sendMessage', data);
+    },
+    receiveMessage: (callback) => {
+        ipcRenderer.on('receiveMessage', (event, ...args) => callback(...args));
+    },
+});
+
+// Navigation prevention
+window.addEventListener('beforeunload', (event) => {
+    event.preventDefault();
+    event.returnValue = '';
 });
